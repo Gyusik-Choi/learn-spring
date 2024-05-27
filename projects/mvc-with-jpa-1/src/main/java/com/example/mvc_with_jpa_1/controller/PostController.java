@@ -22,12 +22,12 @@ public class PostController {
         postService.findAll();
     }
 
-    @GetMapping("/postWithComment")
+    @GetMapping("/comment")
     public List<PostResponse> findAllPostWithComment() {
         return postService.findAllPostWithComment();
     }
 
-    @GetMapping("/postWithCommentAndAttachment")
+    @GetMapping("/comment-attachment")
     public void findAllPostWithCommentAndAttachment() {
         postService.findAllPostWithCommentAndAttachment();
     }
