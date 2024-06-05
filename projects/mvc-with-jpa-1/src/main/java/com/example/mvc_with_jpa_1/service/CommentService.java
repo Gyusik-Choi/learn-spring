@@ -27,6 +27,8 @@ public class CommentService {
 
     }
 
+//    https://tecoble.techcourse.co.kr/post/2020-10-21-jpa-fetch-join-paging/
+//    https://velog.io/@jinyoungchoi95/JPA-%EB%AA%A8%EB%93%A0-N1-%EB%B0%9C%EC%83%9D-%EC%BC%80%EC%9D%B4%EC%8A%A4%EA%B3%BC-%ED%95%B4%EA%B2%B0%EC%B1%85
 //    N:1 에서는 fetch join 시
 //    jpql 로 paging 쿼리 가능
 //    Hibernate:
