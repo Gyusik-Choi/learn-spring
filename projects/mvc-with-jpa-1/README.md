@@ -1,10 +1,50 @@
 # Spring MVC with JPA - 1 (진행중)
 
-스프링을 학습하면서 배운 내용들을 실습 해보기 위한 미니 프로젝트다.
+스프링 MVC 를 기반으로 JPA 를 사용하면서 미니 프로젝트를 진행한다.
 
-스프링 MVC 를 기반으로 JPA 를 사용하면서 프로젝트를 진행한다.
+미니 프로젝트를 진행하면서 학습한 내용들을 정리할 예정이다.
 
-JPA 를 사용하면서 마주할 수 있는 N + 1, fetch join 의 pagination, 1:N 관계에서 2개 이상의 자식 테이블의 fetch join 으로 인한 MultipleBagfetchException 문제 등을 다룰 예정이다.
+<br>
+
+정리할 내용들
+
+- RestController
+- RequiredArgsConstructor
+- Builder
+  - "Could not write JSON: Infinite recursion (StackOverflowError)] with root cause"
+- JPA
+  - n + 1
+  - fetch join & pagination
+  - MultipleBagfetchException
+- Querydsl 설정
+
+<br>
+
+
+
+## N + 1
+
+<br>
+
+## fetch join & pagination
+
+1:N 에서 fetch join 과 pagination 을 사용하면 Out of Memory 경고가 발생한다.
+
+<br>
+
+### 해결책 1
+
+1:N 대신 N:1 에서 fetch join 과 pagination 실행하면 정상적으로 동작한다.
+
+<br>
+
+### 해결책2
+
+batch size
+
+<br>
+
+## MultipleBagfetchException
 
 <br>
 
@@ -32,36 +72,6 @@ This is an unexpected error. Please file a bug containing the idea.log file.
 
 <br>
 
-## N + 1
-
-
-
-<br>
-
-## fetch join 과 pagination
-
-1:N 에서 fetch join 과 pagination 을 사용하면 Out of Memory 경고가 발생한다.
-
-<br>
-
-### 해결책 1
-
-1:N 대신 N:1 에서 fetch join 과 pagination 실행하면 정상적으로 동작한다.
-
-<br>
-
-### 해결책2
-
-batch size
-
-
-
-<br>
-
-## MultipleBagfetchException
-
-<br>
-
 <참고>
 
 https://kukim.tistory.com/150
@@ -73,4 +83,6 @@ https://jojoldu.tistory.com/165
 https://velog.io/@jinyoungchoi95/JPA-%EB%AA%A8%EB%93%A0-N1-%EB%B0%9C%EC%83%9D-%EC%BC%80%EC%9D%B4%EC%8A%A4%EA%B3%BC-%ED%95%B4%EA%B2%B0%EC%B1%85
 
 https://tecoble.techcourse.co.kr/post/2020-10-21-jpa-fetch-join-paging/
+
+https://nosy-rabbit.tistory.com/entry/git-%EC%9D%B8%ED%85%94%EB%A6%AC%EC%A0%9C%EC%9D%B4-%EC%97%90%EC%84%9C-applicationproperties%ED%8C%8C%EC%9D%BC-gitignore-%ED%95%98%EA%B8%B0
 
