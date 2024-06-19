@@ -24,7 +24,6 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-//	https://tecoble.techcourse.co.kr/post/2020-09-20-validation-in-spring-boot/
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 
 //	https://velog.io/@juhyeon1114/Spring-QueryDsl-gradle-%EC%84%A4%EC%A0%95-Spring-boot-3.0-%EC%9D%B4%EC%83%81

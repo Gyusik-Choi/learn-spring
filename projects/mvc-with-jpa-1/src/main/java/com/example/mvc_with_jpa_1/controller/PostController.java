@@ -43,6 +43,7 @@ public class PostController {
     }
 
     @PostMapping()
+    // https://tecoble.techcourse.co.kr/post/2020-09-20-validation-in-spring-boot/
     public void savePost(@RequestBody @Valid PostSaveRequest saveRequest) {
         postService.savePost(saveRequest);
     }

@@ -17,6 +17,7 @@
   - fetch join & pagination
   - MultipleBagfetchException
 - Querydsl 설정
+- Testing
 
 <br>
 
@@ -85,4 +86,6 @@ https://velog.io/@jinyoungchoi95/JPA-%EB%AA%A8%EB%93%A0-N1-%EB%B0%9C%EC%83%9D-%E
 https://tecoble.techcourse.co.kr/post/2020-10-21-jpa-fetch-join-paging/
 
 https://nosy-rabbit.tistory.com/entry/git-%EC%9D%B8%ED%85%94%EB%A6%AC%EC%A0%9C%EC%9D%B4-%EC%97%90%EC%84%9C-applicationproperties%ED%8C%8C%EC%9D%BC-gitignore-%ED%95%98%EA%B8%B0
+
+https://tecoble.techcourse.co.kr/post/2020-09-20-validation-in-spring-boot/
 
