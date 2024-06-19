@@ -89,3 +89,7 @@ https://nosy-rabbit.tistory.com/entry/git-%EC%9D%B8%ED%85%94%EB%A6%AC%EC%A0%9C%E
 
 https://tecoble.techcourse.co.kr/post/2020-09-20-validation-in-spring-boot/
 
+https://mangkyu.tistory.com/174
+
+https://docs.spring.io/spring-framework/reference/testing/spring-mvc-test-framework/server.html
+
