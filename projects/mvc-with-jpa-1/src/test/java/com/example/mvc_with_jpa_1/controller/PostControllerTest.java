@@ -33,7 +33,8 @@ public class PostControllerTest {
 
         ObjectMapper objectMapper = new ObjectMapper();
 
-        this.mockMvc.perform(MockMvcRequestBuilders
+        this.mockMvc
+                .perform(MockMvcRequestBuilders
                         .post("/post")
                         .content(objectMapper.writeValueAsString(mockPostSaveRequest))
                         .contentType(MediaType.APPLICATION_JSON))
