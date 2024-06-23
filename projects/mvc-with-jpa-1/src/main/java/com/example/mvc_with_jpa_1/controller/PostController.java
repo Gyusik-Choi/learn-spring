@@ -18,8 +18,8 @@ public class PostController {
     private final PostService postService;
 
     @GetMapping("")
-    public void findAll() {
-        postService.findAll();
+    public List<PostResponse> findAllPost() {
+        return postService.findAllPost();
     }
 
     @GetMapping("/comment")

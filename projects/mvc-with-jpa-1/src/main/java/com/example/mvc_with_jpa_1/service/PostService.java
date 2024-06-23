@@ -22,7 +22,7 @@ public class PostService {
     public final PostRepository postRepository;
     public final PostEmRepository postEmRepository;
 
-    public void findAll() {
+    public List<PostResponse> findAllPost() {
 //        Post 엔티티에서 일대다 연관관계를 맺는
 //        Comment 엔티티에 대한 fetch 조건을
 //        Eager, Lazy 어떤 것으로 하더라도
@@ -49,6 +49,14 @@ public class PostService {
                 .flatMap(Collection::stream)
                 .map(Attachment::getFilename)
                 .toList();
+
+        return posts
+                .stream()
+                .map((p) -> PostResponse
+                        .builder()
+                        .post(p)
+                        .build())
+                .collect(Collectors.toList());
     }
 
     public List<PostResponse> findAllPostWithComment() {
@@ -89,6 +97,7 @@ public class PostService {
                 System.out.println(c.getContent());
             }
         }
+
         return posts
                 .stream()
                 .map((p) -> PostResponse
