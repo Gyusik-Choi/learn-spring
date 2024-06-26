@@ -5,7 +5,9 @@ import com.example.mvc_with_jpa_1.dto.PostResponse;
 import com.example.mvc_with_jpa_1.dto.PostSaveRequest;
 import com.example.mvc_with_jpa_1.service.PostService;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -14,6 +16,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
@@ -47,11 +50,17 @@ public class PostControllerTest {
         Post mockPost = new Post(1L, "title", "content", List.of());
         Mockito.when(postService.findAllPost()).thenReturn(List.of(new PostResponse(mockPost)));
 
-        this.mockMvc.perform(MockMvcRequestBuilders
+        // https://g-db.tistory.com/entry/Spring-Test-MockMvc-Response%EB%A1%9C-%EA%B2%80%EC%A6%9D%ED%95%98%EA%B8%B0
+        MvcResult mvcResult = this.mockMvc.perform(MockMvcRequestBuilders
                         .get("/post")
-                        .contentType(MediaType.APPLICATION_JSON));
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+                .andReturn();
 
-        // 값 검증 로직 필요!
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        List<PostResponse> result = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<List<PostResponse>>() {});
+        Assertions.assertThat(result).usingRecursiveComparison().isEqualTo(List.of(new PostResponse(mockPost)));
     }
 
     @Test
