@@ -4,7 +4,6 @@ import com.example.mvc_with_jpa_1.domain.Post;
 import com.example.mvc_with_jpa_1.dto.PostResponse;
 import com.example.mvc_with_jpa_1.dto.PostSaveRequest;
 import com.example.mvc_with_jpa_1.service.PostService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.assertj.core.api.Assertions;
@@ -37,7 +36,7 @@ public class PostControllerTest {
 
     @Test
     @DisplayName("모든 Post 를 조회한다")
-    void find_all_post() throws Exception {
+    void findAllPost() throws Exception {
         this.mockMvc.perform(MockMvcRequestBuilders
                         .get("/post")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -46,7 +45,7 @@ public class PostControllerTest {
 
     @Test
     @DisplayName("모든 Post 의 갯수는 1개고, 이를 정상적으로 조회한다")
-    void find_all_post_2() throws Exception {
+    void findAllPost_2() throws Exception {
         Post mockPost = new Post(1L, "title", "content", List.of());
         Mockito.when(postService.findAllPost()).thenReturn(List.of(new PostResponse(mockPost)));
 
@@ -65,7 +64,7 @@ public class PostControllerTest {
 
     @Test
     @DisplayName("request body 에 title, content 가 필요한데 title 만 담아서 에러가 발생한다")
-    void save_post() throws Exception {
+    void savePost() throws Exception {
         final PostSaveRequest mockPostSaveRequest = PostSaveRequest
                 .builder()
                 .title("title")
@@ -83,7 +82,7 @@ public class PostControllerTest {
 
     @Test
     @DisplayName("request body 에 title, content 가 필요한데 content 만 담아서 에러가 발생한다")
-    void save_post_2() throws Exception {
+    void savePost_2() throws Exception {
         final PostSaveRequest mockPostSaveRequest = PostSaveRequest
                 .builder()
                 .content("content")
@@ -101,7 +100,7 @@ public class PostControllerTest {
 
     @Test
     @DisplayName("request body 에 title, content 을 모두 담아서 정상 동작 한다")
-    void save_post_3() throws Exception {
+    void savePost_3() throws Exception {
         final PostSaveRequest mockPostSaveRequest = PostSaveRequest
                 .builder()
                 .title("title")
