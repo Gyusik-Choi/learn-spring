@@ -4,6 +4,7 @@ import com.example.mvc_with_jpa_1.domain.Post;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -47,23 +48,24 @@ public class PostEmRepository {
 //    join
 //        comment c1_0
 //            on p1_0.id=c1_0.post_id
-    public List<Post> findAllJoinFetchLimitByEm() {
+    public List<Post> findAllJoinFetchLimitByEm(Pageable pageable) {
         TypedQuery<Post> query = entityManager.createQuery("select p from Post p join fetch p.comments", Post.class);
-        query.setFirstResult(0);
-        query.setMaxResults(3);
+        query.setFirstResult(pageable.getPageNumber());
+        query.setMaxResults(pageable.getPageSize());
         return query.getResultList();
     }
 
 //    https://velog.io/@hyungzin0309/JPA-%EC%9D%BC-%EB%8C%80-%EB%8B%A4-Fetch-Join-Pagination
 //    batch size 를 application.properties 에 걸어야 한다
-    public List<Post> findAllJoinNoFetchLimitByEm() {
+    public List<Post> findAllJoinNoFetchLimitByEm(Pageable pageable) {
         TypedQuery<Post> query = entityManager.createQuery("select p from Post p join p.comments c", Post.class);
 //        !
 //        주의할점은
 //        1:N 에서 paging 을 걸었다고 해서
 //        paging 갯수가 1에 걸린다고 생각하면 안 된다
 //        실제 db 에 조회한다고 생각해보자
-//        limit 을 거는데
+//
+//        limit 을 3으로 건다고 가정하면
 //        db 에는
 //        post 가 1개가 있고
 //        post 1개에 대한 외래키를 갖는
@@ -74,8 +76,8 @@ public class PostEmRepository {
 //        post 1, comment 2
 //        post 1, comment 3
 //        !
-        query.setFirstResult(0);
-        query.setMaxResults(3);
+        query.setFirstResult(pageable.getPageNumber());
+        query.setMaxResults(pageable.getPageSize());
         return query.getResultList();
     }
 }

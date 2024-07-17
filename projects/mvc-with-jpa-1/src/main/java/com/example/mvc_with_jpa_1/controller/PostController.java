@@ -6,6 +6,7 @@ import com.example.mvc_with_jpa_1.service.PostService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,9 +33,10 @@ public class PostController {
         postService.findAllPostWithCommentAndAttachment();
     }
 
+    // curl -G -d "page=0" -d "size=5" http://localhost:8080/post/paging
     @GetMapping("/paging")
-    public List<PostResponse> findAllPostPaging() {
-        return postService.findAllPostPaging();
+    public List<PostResponse> findAllPostPaging(Pageable pageable) {
+        return postService.findAllPostPaging(pageable);
     }
 
     @GetMapping("/{id}")

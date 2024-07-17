@@ -9,6 +9,7 @@ import com.example.mvc_with_jpa_1.repository.PostEmRepository;
 import com.example.mvc_with_jpa_1.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -171,10 +172,10 @@ public class PostService {
                 .toList();
     }
 
-    public List<PostResponse> findAllPostPaging() {
+    public List<PostResponse> findAllPostPaging(Pageable pageable) {
 //        List<Post> posts = postRepository.findAllJoinFetch();
-//        List<Post> posts = postEmRepository.findAllJoinFetchLimitByEm();
-        List<Post> posts = postEmRepository.findAllJoinNoFetchLimitByEm();
+//        List<Post> posts = postEmRepository.findAllJoinFetchLimitByEm(pageable);
+        List<Post> posts = postEmRepository.findAllJoinNoFetchLimitByEm(pageable);
 
         for (Post p : posts) {
             System.out.println("post = " + p);
