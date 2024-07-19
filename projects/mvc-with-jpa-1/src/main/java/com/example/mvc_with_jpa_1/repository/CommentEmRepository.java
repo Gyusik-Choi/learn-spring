@@ -4,6 +4,7 @@ import com.example.mvc_with_jpa_1.domain.Comment;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -36,10 +37,15 @@ public class CommentEmRepository {
 //                on p1_0.id=c1_0.post_id
 //        limit
 //            ?, ?
-    public List<Comment> findAllJoinFetchLimitByEm(int page, int size) {
-        TypedQuery<Comment> query = entityManager.createQuery("select c from Comment c join fetch c.post", Comment.class);
-        query.setFirstResult((page - 1) * size);
-        query.setMaxResults(size);
+    public List<Comment> findAllJoinFetchLimitByEm(int postId, Pageable pageable) {
+//        https://velog.io/@j3beom/JPA-JPQL-Fetch-Join
+//        https://www.inflearn.com/questions/15876/fetch-join-%EC%8B%9C-%EB%B3%84%EC%B9%AD%EA%B4%80%EB%A0%A8-%EC%A7%88%EB%AC%B8%EC%9E%85%EB%8B%88%EB%8B%A4
+//        fetch join 대상에는 별칭을 줄 수 없으나 hibernate 에서만 가능
+//        TypedQuery<Comment> query = entityManager.createQuery("select c from Comment c join fetch c.post p where p.id = :postId", Comment.class);
+        TypedQuery<Comment> query = entityManager.createQuery("select c from Comment c join fetch c.post where c.post.id = :postId", Comment.class);
+        query.setParameter("postId", postId);
+        query.setFirstResult(pageable.getPageNumber());
+        query.setMaxResults(pageable.getPageSize());
         return query.getResultList();
     }
 }

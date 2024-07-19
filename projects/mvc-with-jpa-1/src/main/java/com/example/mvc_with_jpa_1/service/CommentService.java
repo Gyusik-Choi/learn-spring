@@ -2,14 +2,17 @@ package com.example.mvc_with_jpa_1.service;
 
 import com.example.mvc_with_jpa_1.domain.Comment;
 import com.example.mvc_with_jpa_1.domain.Post;
+import com.example.mvc_with_jpa_1.dto.CommentResponse;
 import com.example.mvc_with_jpa_1.dto.CommentSaveRequest;
 import com.example.mvc_with_jpa_1.repository.CommentEmRepository;
 import com.example.mvc_with_jpa_1.repository.CommentRepository;
 import com.example.mvc_with_jpa_1.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -46,8 +49,16 @@ public class CommentService {
 //                on p1_0.id=c1_0.post_id
 //        limit
 //            ?, ?
-    public void findAllCommentPaging(int page, int size) {
-        List<Comment> comments = commentEmRepository.findAllJoinFetchLimitByEm(page, size);
+    public List<CommentResponse> findAllCommentPaging(int postId, Pageable pageable) {
+        List<Comment> comments = commentEmRepository.findAllJoinFetchLimitByEm(postId, pageable);
+
+        return comments
+                .stream()
+                .map((c) -> CommentResponse
+                        .builder()
+                        .comment(c)
+                        .build())
+                .collect(Collectors.toList());
     }
 
     public void saveComment(CommentSaveRequest saveRequest) {
