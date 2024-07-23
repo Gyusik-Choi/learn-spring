@@ -35,8 +35,8 @@ public class PostController {
 
     // curl -G -d "page=0" -d "size=5" http://localhost:8080/post/paging
     @GetMapping("/paging")
-    public List<PostResponse> findAllPostPaging(Pageable pageable) {
-        return postService.findAllPostPaging(pageable);
+    public List<PostResponse> findPostPaging(Pageable pageable) {
+        return postService.findPostPaging(pageable);
     }
 
     @GetMapping("/{id}")

@@ -13,6 +13,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -113,6 +114,19 @@ public class PostControllerTest {
                 .perform(MockMvcRequestBuilders
                         .post("/post")
                         .content(objectMapper.writeValueAsString(mockPostSaveRequest))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
+    }
+
+    @Test
+    void findPostPaging() throws Exception {
+        PageRequest request = PageRequest.of(0, 3);
+
+        this.mockMvc
+                .perform(MockMvcRequestBuilders
+                        .get("/post/paging")
+                        .queryParam("page", Integer.toString(request.getPageNumber()))
+                        .queryParam("size", Integer.toString((int) request.getOffset()))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
     }
