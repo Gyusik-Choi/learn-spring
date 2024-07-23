@@ -8,6 +8,7 @@ import com.example.mvc_with_jpa_1.repository.CommentEmRepository;
 import com.example.mvc_with_jpa_1.repository.CommentRepository;
 import com.example.mvc_with_jpa_1.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.BadRequestException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -67,8 +68,15 @@ public class CommentService {
                 .collect(Collectors.toList());
     }
 
-    public void findComment() {
+    public CommentResponse findComment(Long id) throws BadRequestException {
+        Comment comment = commentRepository
+                .findById(id)
+                .orElseThrow(BadRequestException::new);
 
+        return CommentResponse
+                .builder()
+                .comment(comment)
+                .build();
     }
 
 //    https://tecoble.techcourse.co.kr/post/2020-10-21-jpa-fetch-join-paging/

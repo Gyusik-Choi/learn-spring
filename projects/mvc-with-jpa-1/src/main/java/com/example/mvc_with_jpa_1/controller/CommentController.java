@@ -5,6 +5,7 @@ import com.example.mvc_with_jpa_1.dto.CommentSaveRequest;
 import com.example.mvc_with_jpa_1.service.CommentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.BadRequestException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +21,11 @@ public class CommentController {
     @GetMapping()
     public List<CommentResponse> findAllComments() {
         return commentService.findAllComments();
+    }
+
+    @GetMapping("/{id}")
+    public CommentResponse findComment(@PathVariable("id") Long id) throws BadRequestException {
+        return commentService.findComment(id);
     }
 
 //     https://oxylabs.io/blog/curl-get-requests
