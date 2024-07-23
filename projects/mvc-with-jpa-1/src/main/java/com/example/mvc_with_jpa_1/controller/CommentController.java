@@ -18,8 +18,8 @@ public class CommentController {
     private final CommentService commentService;
 
     @GetMapping()
-    public void findAllComments() {
-        commentService.findAllComments();
+    public List<CommentResponse> findAllComments() {
+        return commentService.findAllComments();
     }
 
 //     https://oxylabs.io/blog/curl-get-requests
