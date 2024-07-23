@@ -10,8 +10,8 @@ public class CommentResponse {
 
     private final Long id;
 //    private final Post post;
-    private final PostOnlyResponse post;
-//    private final Long postId;
+//    private final PostOnlyResponse post;
+    private final Long postId;
     private final String content;
 
     @Builder
@@ -33,11 +33,12 @@ public class CommentResponse {
 //        무한 반복되면서 무한 루프가 일어난다
 //        필드 post 를 DTO 로 변환해서 에러를 해결할 수 있다
 //        DTO 로 변환하면서 Post 에서 필드로 갖는 comments 를 제거했다
-        this.post = PostOnlyResponse.builder().post(comment.getPost()).build();
+//        this.post = PostOnlyResponse.builder().post(comment.getPost()).build();
+
 //        또 다른 방법으로는
 //        N:1 에서 1의 정보를 모두 전달할 필요가 없으면
 //        Post 의 일부 필드만 반환할 수도 있다
-//        this.postId = comment.getPost().getId();
+        this.postId = comment.getPost().getId();
 
         this.content = comment.getContent();
     }
