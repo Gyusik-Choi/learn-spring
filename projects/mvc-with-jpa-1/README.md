@@ -73,6 +73,32 @@ This is an unexpected error. Please file a bug containing the idea.log file.
 
 <br>
 
+## (Unit) Testing
+
+### Controller
+
+> [To test whether Spring MVC controllers are working as expected, use the `@WebMvcTest` annotation.](https://docs.spring.io/spring-boot/reference/testing/spring-boot-applications.html#testing.spring-boot-applications.spring-mvc-tests)
+
+컨트롤러 테스트에는 @WebMvcTest 어노테이션을 활용했다. @SpringBootTest 어노테이션을 사용할 수도 있으나 Controller 만 빠르게 테스트하고 싶어서 @WebMvcTest 를 사용했다.
+
+<br>
+
+```
+@Controller, @ControllerAdvice, @JsonComponent, Converter, GenericConverter, Filter, HandlerInterceptor, WebMvcConfigurer, WebMvcRegistrations, and HandlerMethodArgumentResolver.
+```
+
+@WebMvcTest 는 스캔하는 빈이 제한된다. @WebMvcTest 가 스캔하는 빈의 종류는 위와 같다. 
+
+@Service 를 스캔하지 않기 때문에(@Component 도 스캔하지 않음) 컨트롤러에 서비스의 의존성이 있다면 @MockBean 로 mock 객체를 만들어서 의존성을 해결할 수 있다.
+
+<br>
+
+### Service
+
+
+
+<br>
+
 <참고>
 
 https://kukim.tistory.com/150
@@ -93,3 +119,4 @@ https://mangkyu.tistory.com/174
 
 https://docs.spring.io/spring-framework/reference/testing/spring-mvc-test-framework/server.html
 
+https://docs.spring.io/spring-boot/reference/testing/spring-boot-applications.html#testing.spring-boot-applications.spring-mvc-tests
