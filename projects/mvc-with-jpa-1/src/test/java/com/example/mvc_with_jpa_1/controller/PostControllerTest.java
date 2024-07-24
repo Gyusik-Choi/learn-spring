@@ -29,15 +29,16 @@ public class PostControllerTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private PostController postController;
+    private PostController controller;
 
     @MockBean
-    private PostService postService;
+    private PostService service;
 
     @Test
     @DisplayName("모든 Post 를 조회한다")
     void findAllPost() throws Exception {
-        this.mockMvc.perform(MockMvcRequestBuilders
+        this.mockMvc
+                .perform(MockMvcRequestBuilders
                         .get("/post")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
@@ -47,10 +48,11 @@ public class PostControllerTest {
     @DisplayName("모든 Post 의 갯수는 1개고, 이를 정상적으로 조회한다")
     void findAllPost_2() throws Exception {
         Post mockPost = new Post(1L, "title", "content", List.of());
-        Mockito.when(postService.findAllPost()).thenReturn(List.of(new PostResponse(mockPost)));
+        Mockito.when(service.findAllPost()).thenReturn(List.of(new PostResponse(mockPost)));
 
         // https://g-db.tistory.com/entry/Spring-Test-MockMvc-Response%EB%A1%9C-%EA%B2%80%EC%A6%9D%ED%95%98%EA%B8%B0
-        MvcResult mvcResult = this.mockMvc.perform(MockMvcRequestBuilders
+        MvcResult mvcResult = this.mockMvc
+                .perform(MockMvcRequestBuilders
                         .get("/post")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())

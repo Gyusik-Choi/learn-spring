@@ -15,7 +15,7 @@ public class CommentResponse {
     private final String content;
 
     @Builder
-    CommentResponse(Comment comment) {
+    public CommentResponse(Comment comment) {
         this.id = comment.getId();
 //        post 와 comment 는 1:N 관계인데
 //        post 에서 comment 를 조회하는데

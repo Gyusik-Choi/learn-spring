@@ -44,9 +44,6 @@ public class CommentController {
         return commentService.findAllCommentPaging(postId, pageable);
     }
 
-//    @GetMapping("/{id}")
-//    public void findComment() {}
-
     @PostMapping()
     public void saveComment(@RequestBody @Valid CommentSaveRequest saveRequest) {
         commentService.saveComment(saveRequest);
