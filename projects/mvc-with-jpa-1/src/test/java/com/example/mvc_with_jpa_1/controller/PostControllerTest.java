@@ -20,7 +20,6 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.io.IOException;
 import java.util.List;
 
 @WebMvcTest(PostController.class)
@@ -129,5 +128,35 @@ public class PostControllerTest {
                         .queryParam("size", Integer.toString((int) request.getOffset()))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
+    }
+
+    @Test
+    @DisplayName("path variable 에 정수를 보내지 않으면 에러가 발생한다")
+    void findPost() throws Exception {
+        this.mockMvc
+                .perform(MockMvcRequestBuilders
+                        .get(String.format("/post/%s", "s"))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("path variable 에 0이하의 값을 보내면 에러가 발생한다")
+    void findPost_2() throws Exception {
+        this.mockMvc
+                .perform(MockMvcRequestBuilders
+                        .get(String.format("/post/%s", 0))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("path variable 에 0이하의 값을 보내면 에러가 발생한다")
+    void findPost_3() throws Exception {
+        this.mockMvc
+                .perform(MockMvcRequestBuilders
+                        .get(String.format("/post/%s", -1))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 }
