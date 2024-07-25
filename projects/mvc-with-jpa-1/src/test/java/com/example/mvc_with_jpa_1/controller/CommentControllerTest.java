@@ -34,7 +34,11 @@ public class CommentControllerTest {
 
     @Test
     void findAllComments() throws Exception {
-        Comment mockComment = Comment.builder().id(1L).post(Post.builder().id(1L).build()).content("content").build();
+        Comment mockComment = Comment.builder()
+                .id(1L)
+                .post(Post.builder().id(1L).build())
+                .content("content")
+                .build();
         List<CommentResponse> mockResult = List.of(new CommentResponse(mockComment));
         Mockito.when(service.findAllComments()).thenReturn(mockResult);
 
