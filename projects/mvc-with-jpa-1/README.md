@@ -93,6 +93,10 @@ This is an unexpected error. Please file a bug containing the idea.log file.
 
 <br>
 
+그러나 [이글](https://mangkyu.tistory.com/145)과 [또 다른 글](https://tech.kakaopay.com/post/mock-test-code/#mockbean-%EC%82%AC%EC%9A%A9-%EC%8B%9C-application-context-%EC%B4%88%EA%B8%B0%ED%99%94-%EB%AC%B8%EC%A0%9C)에서 언급하는 것처럼 @WebMvcTest, @MockBean 도 단점이 존재하기 때문에 이에 대한 학습이 추가로 필요하다.
+
+<br>
+
 ### Service
 
 
@@ -120,3 +124,7 @@ https://mangkyu.tistory.com/174
 https://docs.spring.io/spring-framework/reference/testing/spring-mvc-test-framework/server.html
 
 https://docs.spring.io/spring-boot/reference/testing/spring-boot-applications.html#testing.spring-boot-applications.spring-mvc-tests
+
+https://mangkyu.tistory.com/145
+
+https://tech.kakaopay.com/post/mock-test-code/#mockbean-%EC%82%AC%EC%9A%A9-%EC%8B%9C-application-context-%EC%B4%88%EA%B8%B0%ED%99%94-%EB%AC%B8%EC%A0%9C
