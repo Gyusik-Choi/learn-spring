@@ -40,7 +40,7 @@ public class CommentController {
 //        commentService.findAllCommentPaging(page, size);
 //    }
     @GetMapping("/paging")
-    public List<CommentResponse> findAllCommentPaging(@RequestParam("postId") int postId, Pageable pageable) {
+    public List<CommentResponse> findAllCommentPaging(@RequestParam("postId") Long postId, Pageable pageable) {
         return commentService.findAllCommentPaging(postId, pageable);
     }
 

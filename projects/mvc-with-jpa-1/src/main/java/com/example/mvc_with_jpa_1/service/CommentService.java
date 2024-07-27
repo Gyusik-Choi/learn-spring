@@ -98,7 +98,7 @@ public class CommentService {
 //                on p1_0.id=c1_0.post_id
 //        limit
 //            ?, ?
-    public List<CommentResponse> findAllCommentPaging(int postId, Pageable pageable) {
+    public List<CommentResponse> findAllCommentPaging(Long postId, Pageable pageable) {
         List<Comment> comments = commentEmRepository.findAllJoinFetchLimitByEm(postId, pageable);
 
         return comments

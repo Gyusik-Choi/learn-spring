@@ -14,6 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 import java.util.Optional;
@@ -108,5 +109,39 @@ public class CommentServiceTest {
         // when, then
         assertThatThrownBy(() -> service.findComment(id))
                 .isInstanceOf(BadRequestException.class);
+    }
+
+    @Test
+    @DisplayName("repository 에서 조회된 갯수만큼 반환된다")
+    void findAllCommentPaging() {
+        // given
+        Long postId = 3L;
+        PageRequest request = PageRequest.of(0, 1);
+
+        Post mockPost = Post.builder()
+                .id(postId)
+                .build();
+        Comment mockComment1 = Comment.builder()
+                .id(1L)
+                .post(mockPost)
+                .content("content1")
+                .build();
+        Comment mockComment2 = Comment.builder()
+                .id(2L)
+                .post(mockPost)
+                .content("content2")
+                .build();
+        List<Comment> comment = List.of(mockComment1, mockComment2);
+
+        given(commentEmRepository.findAllJoinFetchLimitByEm(postId, request))
+                .willReturn(comment);
+
+        // when
+        List<CommentResponse> result = service.findAllCommentPaging(postId, request);
+
+        // then
+        assertThat(result.size()).isEqualTo(2);
+        assertThat(result.get(0).getPostId()).isEqualTo(postId);
+        assertThat(result.get(1).getPostId()).isEqualTo(postId);
     }
 }
