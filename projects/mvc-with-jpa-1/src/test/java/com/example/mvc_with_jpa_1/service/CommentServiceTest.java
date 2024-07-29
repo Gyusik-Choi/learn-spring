@@ -7,7 +7,6 @@ import com.example.mvc_with_jpa_1.repository.CommentEmRepository;
 import com.example.mvc_with_jpa_1.repository.CommentRepository;
 import com.example.mvc_with_jpa_1.repository.PostRepository;
 import org.apache.coyote.BadRequestException;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -43,14 +42,9 @@ public class CommentServiceTest {
     @DisplayName("모든 Comment 를 조회한다")
     void findAllComments() {
         // given
-        Post mockPost = Post.builder()
-                .id(1L)
-                .build();
-        Comment mockComment = Comment.builder()
-                .id(1L)
-                .post(mockPost)
-                .content("content")
-                .build();
+        Long id = 1L;
+        Post mockPost = Post.builder().id(id).build();
+        Comment mockComment = Comment.toEntity(id, "content", mockPost);
         List<Comment> mockComments = List.of(mockComment);
 
         // https://galid1.tistory.com/772
@@ -70,14 +64,8 @@ public class CommentServiceTest {
     void findComment() throws BadRequestException {
         // given
         Long id = 1L;
-        Post mockPost = Post.builder()
-                .id(id)
-                .build();
-        Comment mockComment = Comment.builder()
-                .id(id)
-                .post(mockPost)
-                .content("content")
-                .build();
+        Post mockPost = Post.builder().id(id).build();
+        Comment mockComment = Comment.toEntity(id, "content", mockPost);
 
         given(commentRepository.findById(id))
                 .willReturn(Optional.ofNullable(mockComment));
@@ -94,14 +82,6 @@ public class CommentServiceTest {
     void findComment_2() throws BadRequestException {
         // given
         Long id = 1L;
-        Post mockPost = Post.builder()
-                .id(id)
-                .build();
-        Comment mockComment = Comment.builder()
-                .id(id)
-                .post(mockPost)
-                .content("content")
-                .build();
 
         given(commentRepository.findById(id))
                 .willReturn(Optional.empty());
@@ -118,19 +98,9 @@ public class CommentServiceTest {
         Long postId = 3L;
         PageRequest request = PageRequest.of(0, 1);
 
-        Post mockPost = Post.builder()
-                .id(postId)
-                .build();
-        Comment mockComment1 = Comment.builder()
-                .id(1L)
-                .post(mockPost)
-                .content("content1")
-                .build();
-        Comment mockComment2 = Comment.builder()
-                .id(2L)
-                .post(mockPost)
-                .content("content2")
-                .build();
+        Post mockPost = Post.builder().id(postId).build();
+        Comment mockComment1 = Comment.toEntity(1L, "content", mockPost);
+        Comment mockComment2 = Comment.toEntity(2L, "content2", mockPost);
         List<Comment> comment = List.of(mockComment1, mockComment2);
 
         given(commentEmRepository.findAllJoinFetchLimitByEm(postId, request))

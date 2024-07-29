@@ -21,4 +21,12 @@ public class PostSaveRequest {
         this.title = title;
         this.content = content;
     }
+
+    public static PostSaveRequest toDTO(String title, String content) {
+        return PostSaveRequest
+                .builder()
+                .title("title")
+                .content("content")
+                .build();
+    }
 }

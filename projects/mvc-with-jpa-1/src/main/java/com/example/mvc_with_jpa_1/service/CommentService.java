@@ -61,10 +61,7 @@ public class CommentService {
         }
         return comments
                 .stream()
-                .map((c) -> CommentResponse
-                        .builder()
-                        .comment(c)
-                        .build())
+                .map(CommentResponse::toDTO)
                 .collect(Collectors.toList());
     }
 
@@ -73,10 +70,7 @@ public class CommentService {
                 .findById(id)
                 .orElseThrow(BadRequestException::new);
 
-        return CommentResponse
-                .builder()
-                .comment(comment)
-                .build();
+        return CommentResponse.toDTO(comment);
     }
 
 //    https://tecoble.techcourse.co.kr/post/2020-10-21-jpa-fetch-join-paging/
@@ -103,21 +97,14 @@ public class CommentService {
 
         return comments
                 .stream()
-                .map((c) -> CommentResponse
-                        .builder()
-                        .comment(c)
-                        .build())
+                .map(CommentResponse::toDTO)
                 .collect(Collectors.toList());
     }
 
     public void saveComment(CommentSaveRequest saveRequest) {
 //        https://jgrammer.tistory.com/entry/JPA-%EB%B9%84%ED%9A%A8%EC%9C%A8%EC%A0%81%EC%9D%B8-%EC%97%B0%EA%B4%80-%EA%B4%80%EA%B3%84-%EC%A0%80%EC%9E%A5-%EB%B0%A9%EC%8B%9D-%EA%B0%9C%EC%84%A0%EB%B6%88%ED%95%84%EC%9A%94%ED%95%9C-select%EB%AC%B8-%EC%A0%9C%EA%B1%B0
         Post post = postRepository.getReferenceById(saveRequest.getPostId());
-        Comment comment = Comment
-                .builder()
-                .post(post)
-                .content(saveRequest.getContent())
-                .build();
+        Comment comment = Comment.toEntity(saveRequest, post);
         commentRepository.save(comment);
     }
 }

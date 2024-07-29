@@ -14,6 +14,13 @@ public class CommentResponse {
     private final Long postId;
     private final String content;
 
+    public static CommentResponse toDTO(Comment comment) {
+        return CommentResponse
+                .builder()
+                .comment(comment)
+                .build();
+    }
+
     @Builder
     public CommentResponse(Comment comment) {
         this.id = comment.getId();

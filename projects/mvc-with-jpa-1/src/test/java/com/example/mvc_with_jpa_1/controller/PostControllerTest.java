@@ -103,11 +103,7 @@ public class PostControllerTest {
     @Test
     @DisplayName("request body 에 title, content 을 모두 담아서 정상 동작 한다")
     void savePost_3() throws Exception {
-        final PostSaveRequest mockPostSaveRequest = PostSaveRequest
-                .builder()
-                .title("title")
-                .content("content")
-                .build();
+        final PostSaveRequest mockPostSaveRequest = PostSaveRequest.toDTO("title", "content");
 
         ObjectMapper objectMapper = new ObjectMapper();
 
