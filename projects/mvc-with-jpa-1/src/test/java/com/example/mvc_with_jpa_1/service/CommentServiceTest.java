@@ -44,7 +44,12 @@ public class CommentServiceTest {
         // given
         Long id = 1L;
         Post mockPost = Post.builder().id(id).build();
-        Comment mockComment = Comment.toEntity(id, "content", mockPost);
+        Comment mockComment = Comment
+                .builder()
+                .id(id)
+                .content("content")
+                .post(mockPost)
+                .build();
         List<Comment> mockComments = List.of(mockComment);
 
         // https://galid1.tistory.com/772
@@ -65,7 +70,12 @@ public class CommentServiceTest {
         // given
         Long id = 1L;
         Post mockPost = Post.builder().id(id).build();
-        Comment mockComment = Comment.toEntity(id, "content", mockPost);
+        Comment mockComment = Comment
+                .builder()
+                .id(id)
+                .content("content")
+                .post(mockPost)
+                .build();
 
         given(commentRepository.findById(id))
                 .willReturn(Optional.ofNullable(mockComment));
@@ -99,8 +109,18 @@ public class CommentServiceTest {
         PageRequest request = PageRequest.of(0, 1);
 
         Post mockPost = Post.builder().id(postId).build();
-        Comment mockComment1 = Comment.toEntity(1L, "content", mockPost);
-        Comment mockComment2 = Comment.toEntity(2L, "content2", mockPost);
+        Comment mockComment1 = Comment
+                .builder()
+                .id(1L)
+                .content("content")
+                .post(mockPost)
+                .build();
+        Comment mockComment2 = Comment
+                .builder()
+                .id(2L)
+                .content("content2")
+                .post(mockPost)
+                .build();
         List<Comment> comment = List.of(mockComment1, mockComment2);
 
         given(commentEmRepository.findAllJoinFetchLimitByEm(postId, request))

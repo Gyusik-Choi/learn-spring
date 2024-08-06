@@ -32,16 +32,15 @@ public class Comment {
     public static Comment toEntity(CommentSaveRequest saveRequest, Post post) {
         return Comment
                 .builder()
-                .post(post)
                 .content(saveRequest.getContent())
+                .post(post)
                 .build();
     }
 
-    public static Comment toEntity(Long id, String content, Post mockPost) {
+    public static Comment toEntity(String content, Post mockPost) {
         return Comment.builder()
-                .id(1L)
+                .content(content)
                 .post(mockPost)
-                .content("content")
                 .build();
     }
 }

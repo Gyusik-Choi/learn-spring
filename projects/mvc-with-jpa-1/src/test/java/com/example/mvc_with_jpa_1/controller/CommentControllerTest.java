@@ -35,10 +35,12 @@ public class CommentControllerTest {
     @Test
     void findAllComments() throws Exception {
         Long id = 1L;
-        // Post 도 toEntity 스태틱 메서드를 만들까 생각했지만
-        // 여기서는 id 만 있는 불완전한 Post 를 만들기 때문에
-        // 불완전한 행위를 하는 메서드를 만드는게 좋지 않다고 생각해서 만들지 않음
-        Comment mockComment = Comment.toEntity(id, "content", Post.builder().id(1L).build());
+        Comment mockComment = Comment
+                .builder()
+                .id(id)
+                .content("content")
+                .post(Post.builder().id(1L).build())
+                .build();
         List<CommentResponse> mockResult = List.of(new CommentResponse(mockComment));
         Mockito.when(service.findAllComments()).thenReturn(mockResult);
 
