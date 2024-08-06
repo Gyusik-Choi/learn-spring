@@ -99,7 +99,38 @@ This is an unexpected error. Please file a bug containing the idea.log file.
 
 ### Service
 
+<br>
 
+### Repository
+
+```
+org.hibernate.exception.SQLGrammarException: could not prepare statement [Table "POST" not found (this database is empty); SQL statement:
+```
+
+h2 memory db 를 이용해서 테스트를 진행하려 했으나 테이블이 제대로 생성되지 않는 에러가 발생했다.
+
+<br>
+
+```sql
+CREATE TABLE post (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(50) NOT NULL,
+    content VARCHAR(200) NOT NULL
+);
+
+CREATE TABLE comment (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    post_id BIGINT NOT NULL,
+    content VARCHAR(200) NOT NULL,
+    FOREIGN KEY (post_id) REFERENCES post(id)
+);
+```
+
+결론적으로 schema.sql 을 이용해서 테이블 생성 구문을 넣어서 해결할 수 있었다.
+
+개발시에는 MySQL 을 사용했는데 수동으로 database 와 table 을 생성한 이후에 엔티티와 매핑했다. 테스트에서는 ddl-auto 옵션을 create-drop 으로해서 테스트마다 테이블을 자동으로 생성하고 제거하려 했으나 되지 않았다.
+
+아직 정확한 원인은 잘 모르겠으나 개발시에 수동으로 엔티티와 매핑해서 테스트에서는 schema.sql 파일 없이 자동으로 테이블을 생성하지 못하는 듯 하다.
 
 <br>
 
