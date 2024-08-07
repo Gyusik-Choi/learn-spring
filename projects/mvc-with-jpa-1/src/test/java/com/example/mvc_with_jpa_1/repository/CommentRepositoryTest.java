@@ -2,13 +2,14 @@ package com.example.mvc_with_jpa_1.repository;
 
 import com.example.mvc_with_jpa_1.domain.Comment;
 import com.example.mvc_with_jpa_1.domain.Post;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.List;
 
 @DataJpaTest
 class CommentRepositoryTest {
@@ -31,8 +32,9 @@ class CommentRepositoryTest {
     }
 
     @Test
-    @DisplayName("")
+    @DisplayName("모든 Comment 를 조회한다")
     void findAllCommentWithPostFetchJoin() {
-
+        List<Comment> comments = repository.findAllCommentWithPostFetchJoin();
+        Assertions.assertThat(comments.size()).isEqualTo(4);
     }
 }
