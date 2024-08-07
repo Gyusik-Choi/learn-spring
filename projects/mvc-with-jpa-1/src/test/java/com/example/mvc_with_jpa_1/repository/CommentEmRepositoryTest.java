@@ -41,7 +41,7 @@ public class CommentEmRepositoryTest {
     }
 
     @Test
-    @DisplayName("fetch join 을 통한 paging")
+    @DisplayName("page size 만큼 fetch join 으로 조회한다")
     void findAllJoinFetchLimitByEm() {
         Long postId = 1L;
         PageRequest request = PageRequest.of(0, 3);
