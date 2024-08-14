@@ -8,7 +8,7 @@
 
 정리할 내용들
 
-- RestController
+- Controller vs RestController
 - RequiredArgsConstructor
 - Builder
   - "Could not write JSON: Infinite recursion (StackOverflowError)] with root cause"
