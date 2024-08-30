@@ -54,7 +54,19 @@ public class CommentService {
 //            join
 //                post p1_0
 //            on p1_0.id=c1_0.post_id
-        List<Comment> comments = commentRepository.findAllCommentWithPostFetchJoin();
+//        List<Comment> comments = commentRepository.findAllCommentWithPostFetchJoin();
+//        for (Comment comment : comments) {
+//            Post post = comment.getPost();
+//            System.out.println(post.getTitle());
+//        }
+
+//        List<Comment> comments = commentEmRepository.findAll();
+//        for (Comment comment : comments) {
+//            Post post = comment.getPost();
+//            System.out.println(post.getTitle());
+//        }
+
+        List<Comment> comments = commentEmRepository.findAllJoinFetch();
         for (Comment comment : comments) {
             Post post = comment.getPost();
             System.out.println(post.getTitle());
@@ -66,9 +78,15 @@ public class CommentService {
     }
 
     public CommentResponse findComment(Long id) throws BadRequestException {
+//        Comment comment = commentRepository
+//                .findById(id)
+//                .orElseThrow(BadRequestException::new);
+
         Comment comment = commentRepository
-                .findById(id)
+                .findByCommentId(id)
                 .orElseThrow(BadRequestException::new);
+
+        System.out.println(comment.getPost().getTitle());
 
         return CommentResponse.toDTO(comment);
     }

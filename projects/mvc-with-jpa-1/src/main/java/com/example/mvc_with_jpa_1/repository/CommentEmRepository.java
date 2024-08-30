@@ -13,7 +13,17 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CommentEmRepository {
 
-    private final EntityManager entityManager;
+    private final EntityManager em;
+
+    public List<Comment> findAll() {
+        return em.createQuery("select c from Comment c", Comment.class)
+                .getResultList();
+    }
+
+    public List<Comment> findAllJoinFetch() {
+        return em.createQuery("select c From Comment c join fetch c.post", Comment.class)
+                .getResultList();
+    }
 
 //    1:N 에서와 달리
 //    N:1 관계에서는 fetch join 으로 paging 조회하는 경우
@@ -42,7 +52,7 @@ public class CommentEmRepository {
 //        https://www.inflearn.com/questions/15876/fetch-join-%EC%8B%9C-%EB%B3%84%EC%B9%AD%EA%B4%80%EB%A0%A8-%EC%A7%88%EB%AC%B8%EC%9E%85%EB%8B%88%EB%8B%A4
 //        fetch join 대상에는 별칭을 줄 수 없으나 hibernate 에서만 가능
 //        TypedQuery<Comment> query = entityManager.createQuery("select c from Comment c join fetch c.post p where p.id = :postId", Comment.class);
-        TypedQuery<Comment> query = entityManager.createQuery("select c from Comment c join fetch c.post where c.post.id = :postId", Comment.class);
+        TypedQuery<Comment> query = em.createQuery("select c from Comment c join fetch c.post where c.post.id = :postId", Comment.class);
         query.setParameter("postId", postId);
         query.setFirstResult(pageable.getPageNumber());
         query.setMaxResults(pageable.getPageSize());
