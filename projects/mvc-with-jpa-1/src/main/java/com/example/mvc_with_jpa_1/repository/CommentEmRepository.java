@@ -58,4 +58,16 @@ public class CommentEmRepository {
         query.setMaxResults(pageable.getPageSize());
         return query.getResultList();
     }
+
+    public Comment findById(Long commentId) {
+        return em.createQuery("select c from Comment c where c.id = :commentId", Comment.class)
+                .setParameter("commentId", commentId)
+                .getSingleResult();
+    }
+
+    public Comment findByIdJoinFetch(Long commentId) {
+        return em.createQuery("select c from Comment c join fetch c.post where c.id = :commentId", Comment.class)
+                .setParameter("commentId", commentId)
+                .getSingleResult();
+    }
 }

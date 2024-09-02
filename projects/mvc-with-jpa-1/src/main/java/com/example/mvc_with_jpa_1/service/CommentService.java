@@ -82,9 +82,15 @@ public class CommentService {
 //                .findById(id)
 //                .orElseThrow(BadRequestException::new);
 
-        Comment comment = commentRepository
-                .findByCommentId(id)
-                .orElseThrow(BadRequestException::new);
+//        Comment comment = commentRepository
+//                .findByCommentId(id)
+//                .orElseThrow(BadRequestException::new);
+
+//        Comment comment = commentEmRepository
+//                .findById(id);
+
+        Comment comment = commentEmRepository
+                .findByIdJoinFetch(id);
 
         System.out.println(comment.getPost().getTitle());
 
