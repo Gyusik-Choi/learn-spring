@@ -13,12 +13,17 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PostEmRepository {
 
-    private final EntityManager entityManager;
+    private final EntityManager em;
+
+    public List<Post> findAll() {
+        return em.createQuery("select p from Post p", Post.class)
+                .getResultList();
+    }
 
 //    https://onejunu.tistory.com/35
     public List<Post> findAllJoinFetchByEm() {
         String query = "select p from Post p join fetch p.comments";
-        return entityManager.createQuery(query, Post.class).getResultList();
+        return em.createQuery(query, Post.class).getResultList();
     }
 
 //    https://tecoble.techcourse.co.kr/post/2020-10-21-jpa-fetch-join-paging/
@@ -49,7 +54,7 @@ public class PostEmRepository {
 //        comment c1_0
 //            on p1_0.id=c1_0.post_id
     public List<Post> findAllJoinFetchLimitByEm(Pageable pageable) {
-        TypedQuery<Post> query = entityManager.createQuery("select p from Post p join fetch p.comments", Post.class);
+        TypedQuery<Post> query = em.createQuery("select p from Post p join fetch p.comments", Post.class);
         query.setFirstResult(pageable.getPageNumber());
         query.setMaxResults(pageable.getPageSize());
         return query.getResultList();
@@ -58,7 +63,7 @@ public class PostEmRepository {
 //    https://velog.io/@hyungzin0309/JPA-%EC%9D%BC-%EB%8C%80-%EB%8B%A4-Fetch-Join-Pagination
 //    batch size 를 application.properties 에 걸어야 한다
     public List<Post> findAllJoinNoFetchLimitByEm(Pageable pageable) {
-        TypedQuery<Post> query = entityManager.createQuery("select p from Post p join p.comments c", Post.class);
+        TypedQuery<Post> query = em.createQuery("select p from Post p join p.comments c", Post.class);
 //        !
 //        주의할점은
 //        1:N 에서 paging 을 걸었다고 해서

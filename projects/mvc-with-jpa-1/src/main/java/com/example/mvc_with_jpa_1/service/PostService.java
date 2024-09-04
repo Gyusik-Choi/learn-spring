@@ -67,9 +67,12 @@ public class PostService {
 //        N + 1 발생
 //        List<Post> posts = postRepository.findAll();
 
+//        N + 1 발생
+//        List<Post> posts = postEmRepository.findAll();
+
 //        https://jojoldu.tistory.com/165
 //        N + 1 대안 - 1
-        List<Post> posts = postRepository.findAllPostWithCommentJoinFetch();
+//        List<Post> posts = postRepository.findAllPostWithCommentJoinFetch();
 
 //        N + 1 대안 - 2
 //        List<Post> posts = postRepository.findAllEntityGraph();
@@ -79,10 +82,11 @@ public class PostService {
 //        부모 엔티티가 중복되서 나타나지 않는다
 //        ???
 
+//        N + 1 대안 - 3
 //        Spring Data JPA 가 아니라
 //        EntityManager 를 직접 사용해서 조회하면 중복 문제가 나타나는지 해보았으나
 //        마찬가지로 중복되지 않는다
-//        List<Post> posts = postEmRepository.findAllJoinFetchByEm();
+        List<Post> posts = postEmRepository.findAllJoinFetchByEm();
 
 //        https://delvering.tistory.com/52
 //        이분 덕분에 해결할 수 있었다
