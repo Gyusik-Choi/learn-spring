@@ -85,4 +85,16 @@ public class PostEmRepository {
         query.setMaxResults(pageable.getPageSize());
         return query.getResultList();
     }
+
+    public Post findPostWithComment(Long postId) {
+        return em.createQuery("select p from Post p where p.id = :id", Post.class)
+                .setParameter("id", postId)
+                .getSingleResult();
+    }
+
+    public Post findPostJoinFetchWithComment(Long postId) {
+        return em.createQuery("select p from Post p join fetch p.comments where p.id = :id", Post.class)
+                .setParameter("id", postId)
+                .getSingleResult();
+    }
 }

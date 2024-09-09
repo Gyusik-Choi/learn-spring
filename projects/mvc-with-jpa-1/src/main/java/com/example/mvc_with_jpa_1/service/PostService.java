@@ -198,9 +198,22 @@ public class PostService {
     }
 
     public PostResponse findPost(Long id) throws BadRequestException {
-        Post post = postRepository
-                .findById(id)
-                .orElseThrow(BadRequestException::new);
+//        Post post = postRepository
+//                .findById(id)
+//                .orElseThrow(BadRequestException::new);
+
+//        Post post = postRepository
+//                .findPostWithComment(id);
+
+//        Post post = postEmRepository
+//                .findPostWithComment(id);
+
+        Post post = postEmRepository
+                .findPostJoinFetchWithComment(id);
+
+        for (Comment c : post.getComments()) {
+            System.out.println(c.getContent());
+        }
 
         return PostResponse
                 .builder()
