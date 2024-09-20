@@ -29,6 +29,8 @@
 
 ## N + 1
 
+[이곳](https://kuidoli.tistory.com/17) 에 별도로 정리했다.
+
 <br>
 
 ## fetch join & pagination
