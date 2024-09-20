@@ -96,9 +96,13 @@ public class PostService {
 //        https://www.inflearn.com/questions/911481/hibernate-6-%EB%B6%80%ED%84%B0%EB%8A%94-%ED%95%AD%EC%83%81-distinct-%EA%B0%80-%EC%A0%81%EC%9A%A9%EB%90%9C%EB%8B%A4%EA%B3%A0-%ED%95%A9%EB%8B%88%EB%8B%A4-%EB%94%B0%EB%9D%BC%ED%96%88%EB%8A%94%EB%8D%B0-%EA%B2%B0%EA%B3%BC%EA%B0%80-%EB%8B%A4%EB%A5%B4%EA%B2%8C-%EB%82%98%EC%99%80%EC%84%9C-%ED%95%9C%EC%B0%B8-%ED%95%B4%EB%A7%B8%EB%84%A4%EC%9A%94
 //        https://github.com/hibernate/hibernate-orm/blob/6.0/migration-guide.adoc#distinct
 
+//        fetch join 이 아닌 join
+//        List<Post> posts = postRepository.findAllPostWithCommentJoin();
+
         for (Post p : posts) {
             System.out.println("post = " + p);
             for (Comment c : p.getComments()) {
+                System.out.println("comment = " + c);
                 System.out.println(c.getContent());
             }
         }

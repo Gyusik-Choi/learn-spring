@@ -15,6 +15,9 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Query("select p from Post p join fetch p.comments")
     List<Post> findAllPostWithCommentJoinFetch();
 
+    @Query("select p, c from Post p join p.comments c")
+    List<Post> findAllPostWithCommentJoin();
+
 //    MultipleBagFetchException 발생한다
 //    org.hibernate.loader.MultipleBagFetchException: cannot simultaneously fetch multiple bags: [com.example.mvc1.domain.Post.attachments, com.example.mvc1.domain.Post.comments]
     @Query("select p from Post p join fetch p.comments join fetch p.attachments")
