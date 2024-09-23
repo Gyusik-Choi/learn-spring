@@ -33,15 +33,15 @@
 
 <br>
 
-## fetch join & pagination
+## fetch join & paging
 
-1:N 에서 fetch join 과 pagination 을 사용하면 Out of Memory 경고가 발생한다.
+1:N 에서 fetch join 과 paging 을 사용하면 Out of Memory 경고가 발생한다.
 
 <br>
 
 ### 해결책 1
 
-1:N 대신 N:1 에서 fetch join 과 pagination 실행하면 정상적으로 동작한다.
+1:N 대신 N:1 에서 fetch join 과 paging 실행하면 정상적으로 동작한다.
 
 <br>
 
@@ -51,7 +51,7 @@ batch size
 
 <br>
 
-## MultipleBagfetchException
+## MultipleBagFetchException
 
 <br>
 
