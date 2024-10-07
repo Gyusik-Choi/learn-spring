@@ -181,7 +181,7 @@ public class PostService {
     }
 
     public List<PostResponse> findPostPaging(Pageable pageable) {
-//        List<Post> posts = postRepository.findAllJoinFetch();
+//        List<Post> posts = postRepository.findAllJoinFetchLimit();
 //        List<Post> posts = postEmRepository.findAllJoinFetchLimitByEm(pageable);
         List<Post> posts = postEmRepository.findAllJoinNoFetchLimitByEm(pageable);
 
