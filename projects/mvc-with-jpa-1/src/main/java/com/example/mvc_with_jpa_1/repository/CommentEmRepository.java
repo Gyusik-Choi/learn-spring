@@ -59,6 +59,14 @@ public class CommentEmRepository {
         return query.getResultList();
     }
 
+    public List<Comment> findAllJoinLimitByEm(Long postId, Pageable pageable) {
+        TypedQuery<Comment> query = em.createQuery("select c from Comment c join c.post where c.post.id = :postId", Comment.class);
+        query.setParameter("postId", postId);
+        query.setFirstResult(pageable.getPageNumber());
+        query.setMaxResults(pageable.getPageSize());
+        return query.getResultList();
+    }
+
     public Comment findById(Long commentId) {
         return em.createQuery("select c from Comment c where c.id = :commentId", Comment.class)
                 .setParameter("commentId", commentId)
