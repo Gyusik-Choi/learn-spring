@@ -12,6 +12,7 @@ public class CommentResponse {
 //    private final Post post;
 //    private final PostOnlyResponse post;
     private final Long postId;
+//    private final String postTitle;
     private final String content;
 
     public static CommentResponse toDTO(Comment comment) {
@@ -30,7 +31,7 @@ public class CommentResponse {
 //        infinite recursion 에러가 발생한다
 //        -> "Could not write JSON: Infinite recursion (StackOverflowError)] with root cause"
 //        그래서 아래의 코드를 사용하지 않는다
-//        this.postId = comment.getPost().getId();
+//        this.post = comment.getPost();
 //
 //        https://pasudo123.tistory.com/350
 //        위의 에러는 양방향 관계의 엔티티를 컨트롤러에서 Jackson 라이브러리를 이용해서
@@ -46,6 +47,11 @@ public class CommentResponse {
 //        N:1 에서 1의 정보를 모두 전달할 필요가 없으면
 //        Post 의 일부 필드만 반환할 수도 있다
         this.postId = comment.getPost().getId();
+
+//        paging 의 경우
+//        fetch join 이 아닌 join 으로 조회시
+//        postId 가 아닌 postTitle 에 접근하면 N + 1 쿼리가 발생한다
+//        this.postTitle = comment.getPost().getTitle();
 
         this.content = comment.getContent();
     }
