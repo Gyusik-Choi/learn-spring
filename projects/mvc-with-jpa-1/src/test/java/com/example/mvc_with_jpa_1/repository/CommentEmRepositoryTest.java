@@ -45,7 +45,7 @@ public class CommentEmRepositoryTest {
     void findAllJoinFetchLimitByEm() {
         Long postId = 1L;
         PageRequest request = PageRequest.of(0, 3);
-        List<Comment> commentList = commentEmRepository.findAllJoinFetchLimitByEm(postId, request);
+        List<Comment> commentList = commentEmRepository.findAllJoinFetchLimit(postId, request);
 
         Assertions.assertThat(commentList.size()).isEqualTo(3);
     }

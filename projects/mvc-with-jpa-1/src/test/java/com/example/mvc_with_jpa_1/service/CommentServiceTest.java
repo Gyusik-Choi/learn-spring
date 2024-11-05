@@ -54,7 +54,7 @@ public class CommentServiceTest {
 
         // https://galid1.tistory.com/772
         // https://www.nextree.io/mockito/
-        given(commentRepository.findAllCommentWithPostFetchJoin())
+        given(commentRepository.findAllCommentWithPostJoinFetch())
                 .willReturn(mockComments);
 
         // when
@@ -123,7 +123,7 @@ public class CommentServiceTest {
                 .build();
         List<Comment> comment = List.of(mockComment1, mockComment2);
 
-        given(commentEmRepository.findAllJoinFetchLimitByEm(postId, request))
+        given(commentEmRepository.findAllJoinFetchLimit(postId, request))
                 .willReturn(comment);
 
         // when
