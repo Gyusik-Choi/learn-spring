@@ -45,6 +45,11 @@ public class PostController {
         return postService.findPost(id);
     }
 
+    @GetMapping("/comment-attachment/{id}")
+    public void findPostWithCommentAndAttachment(@PathVariable("id") @Min(1) Long id) {
+        postService.findPostWithCommentAndAttachment(id);
+    }
+
     @PostMapping()
     // https://mangkyu.tistory.com/174
     // https://tecoble.techcourse.co.kr/post/2020-09-20-validation-in-spring-boot/
