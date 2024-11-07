@@ -34,7 +34,7 @@ class CommentRepositoryTest {
     @Test
     @DisplayName("모든 Comment 를 조회한다")
     void findAllCommentWithPostFetchJoin() {
-        List<Comment> comments = repository.findAllCommentWithPostFetchJoin();
+        List<Comment> comments = repository.findAllCommentWithPostJoinFetch();
         Assertions.assertThat(comments.size()).isEqualTo(4);
     }
 }

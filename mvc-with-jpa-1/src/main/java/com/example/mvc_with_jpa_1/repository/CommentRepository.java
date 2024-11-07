@@ -11,11 +11,11 @@ import java.util.Optional;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
     @Query("select c from Comment c join fetch c.post")
-    List<Comment> findAllCommentWithPostFetchJoin();
+    List<Comment> findAllCommentWithPostJoinFetch();
 
     @Query("select c from Comment c join fetch c.post where c.id = :commentId")
     Optional<Comment> findByCommentId(@Param("commentId") Long commentId);
 
     @Query("select c from Comment c join fetch c.post p where p.id = :postId")
-    List<Comment> findCommentWithPostFetchJoinPaging(@Param("postId") Long postId, Pageable pageable);
+    List<Comment> findCommentWithPostJoinFetchPaging(@Param("postId") Long postId, Pageable pageable);
 }

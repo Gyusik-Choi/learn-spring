@@ -1,4 +1,4 @@
-# Spring MVC with JPA - 1 (진행중)
+# Spring MVC with JPA - 1
 
 스프링 MVC 를 기반으로 JPA 를 사용하면서 미니 프로젝트를 진행한다.
 
@@ -10,12 +10,14 @@
 
 - Controller & RestController
 - RequiredArgsConstructor
-- Builder
-  - "Could not write JSON: Infinite recursion (StackOverflowError)] with root cause"
 - JPA
-  - n + 1
-  - fetch join & pagination
+  - N + 1
+
+
+  - Join 과 Fetch Join 의 차이
+  - Paging
   - MultipleBagfetchException
+  - DTO
 - Querydsl 설정
 - Testing
 
@@ -33,25 +35,9 @@
 
 <br>
 
-## fetch join & paging
+## Join 과 Fetch Join 의 차이, Paging, MultipleBagFetchException, DTO
 
-1:N 에서 fetch join 과 paging 을 사용하면 Out of Memory 경고가 발생한다.
-
-<br>
-
-### 해결책 1
-
-1:N 대신 N:1 에서 fetch join 과 paging 실행하면 정상적으로 동작한다.
-
-<br>
-
-### 해결책2
-
-batch size
-
-<br>
-
-## MultipleBagFetchException
+[이곳](https://kuidoli.tistory.com/18) 에 별도로 정리했다.
 
 <br>
 
