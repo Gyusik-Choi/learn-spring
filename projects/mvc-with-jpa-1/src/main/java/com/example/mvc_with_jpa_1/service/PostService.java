@@ -86,7 +86,7 @@ public class PostService {
 //        Spring Data JPA 가 아니라
 //        EntityManager 를 직접 사용해서 조회하면 중복 문제가 나타나는지 해보았으나
 //        마찬가지로 중복되지 않는다
-        List<Post> posts = postEmRepository.findAllJoinFetchByEm();
+        List<Post> posts = postEmRepository.findAllJoinFetch();
 
 //        https://delvering.tistory.com/52
 //        이분 덕분에 해결할 수 있었다
@@ -164,6 +164,7 @@ public class PostService {
 //            where
 //                a1_0.post_id in (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         List<Post> posts = postRepository.findAllPostWithCommentAndAttachmentNoJoinFetch();
+//        List<Post> posts = postRepository.findAll();
 
         List<String> commentContents = posts
                 .stream()
@@ -182,8 +183,8 @@ public class PostService {
 
     public List<PostResponse> findPostPaging(Pageable pageable) {
 //        List<Post> posts = postRepository.findAllJoinFetchLimit();
-//        List<Post> posts = postEmRepository.findAllJoinFetchLimitByEm(pageable);
-        List<Post> posts = postEmRepository.findAllJoinNoFetchLimitByEm(pageable);
+//        List<Post> posts = postEmRepository.findAllJoinFetchLimit(pageable);
+        List<Post> posts = postEmRepository.findAllNoJoinFetchLimit(pageable);
 
         for (Post p : posts) {
             System.out.println("post = " + p);
@@ -213,7 +214,7 @@ public class PostService {
 //                .findPostWithComment(id);
 
         Post post = postEmRepository
-                .findPostJoinFetchWithComment(id);
+                .findPostWithCommentJoinFetch(id);
 
         for (Comment c : post.getComments()) {
             System.out.println(c.getContent());
@@ -223,6 +224,29 @@ public class PostService {
                 .builder()
                 .post(post)
                 .build();
+    }
+
+    public void findPostWithCommentAndAttachment(Long id) {
+//        Post post = postRepository
+//                .findPostWithCommentAndAttachmentJoinFetch(id);
+
+//        Post post = postRepository
+//                .findPostWithCommentAndAttachmentNoJoinFetch(id);
+
+        Post post = postEmRepository
+                .findPostWithCommentAndAttachmentNoJoinFetch(id);
+
+        List<String> commentContents = post
+                .getComments()
+                .stream()
+                .map(Comment::getContent)
+                .toList();
+
+        List<String> attachmentFilenames = post
+                .getAttachments()
+                .stream()
+                .map(Attachment::getFilename)
+                .toList();
     }
 
     public void savePost(PostSaveRequest saveRequest) {

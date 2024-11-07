@@ -47,7 +47,7 @@ public class CommentEmRepository {
 //                on p1_0.id=c1_0.post_id
 //        limit
 //            ?, ?
-    public List<Comment> findAllJoinFetchLimitByEm(Long postId, Pageable pageable) {
+    public List<Comment> findAllJoinFetchLimit(Long postId, Pageable pageable) {
 //        https://velog.io/@j3beom/JPA-JPQL-Fetch-Join
 //        https://www.inflearn.com/questions/15876/fetch-join-%EC%8B%9C-%EB%B3%84%EC%B9%AD%EA%B4%80%EB%A0%A8-%EC%A7%88%EB%AC%B8%EC%9E%85%EB%8B%88%EB%8B%A4
 //        fetch join 대상에는 별칭을 줄 수 없으나 hibernate 에서만 가능
@@ -59,7 +59,7 @@ public class CommentEmRepository {
         return query.getResultList();
     }
 
-    public List<Comment> findAllJoinLimitByEm(Long postId, Pageable pageable) {
+    public List<Comment> findAllJoinLimit(Long postId, Pageable pageable) {
         TypedQuery<Comment> query = em.createQuery("select c from Comment c join c.post where c.post.id = :postId", Comment.class);
         query.setParameter("postId", postId);
         query.setFirstResult(pageable.getPageNumber());

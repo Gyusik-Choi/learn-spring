@@ -117,9 +117,9 @@ public class CommentService {
 //        limit
 //            ?, ?
     public List<CommentResponse> findAllCommentPaging(Long postId, Pageable pageable) {
-        List<Comment> comments = commentEmRepository.findAllJoinFetchLimitByEm(postId, pageable);
-//        List<Comment> comments = commentRepository.findCommentWithPostFetchJoinPaging(postId, pageable);
-//        List<Comment> comments = commentEmRepository.findAllJoinLimitByEm(postId, pageable);
+        List<Comment> comments = commentEmRepository.findAllJoinFetchLimit(postId, pageable);
+//        List<Comment> comments = commentRepository.findCommentWithPostJoinFetchPaging(postId, pageable);
+//        List<Comment> comments = commentEmRepository.findAllJoinLimit(postId, pageable);
 
         return comments
                 .stream()

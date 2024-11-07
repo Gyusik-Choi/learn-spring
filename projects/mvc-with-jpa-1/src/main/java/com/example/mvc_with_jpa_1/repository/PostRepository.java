@@ -34,6 +34,12 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Query("select p from Post p join fetch p.comments where p.id = :id")
     Post findPostWithComment(@Param("id") Long id);
 
+    @Query("select p from Post p join fetch p.comments join fetch p.attachments where p.id = :id")
+    Post findPostWithCommentAndAttachmentJoinFetch(@Param("id") Long id);
+
+    @Query("select p from Post p join p.comments join p.attachments where p.id = :id")
+    Post findPostWithCommentAndAttachmentNoJoinFetch(@Param("id") Long id);
+
 //    https://tecoble.techcourse.co.kr/post/2020-10-21-jpa-fetch-join-paging/
 //    JPQL 로 MySQL 의 방언에 속하는 LIMIT 절을 직접 사용할 수 없다
 //    @Query("select p from Post p join fetch p.comments limit 3")

@@ -21,7 +21,7 @@ public class PostEmRepository {
     }
 
 //    https://onejunu.tistory.com/35
-    public List<Post> findAllJoinFetchByEm() {
+    public List<Post> findAllJoinFetch() {
         String query = "select p from Post p join fetch p.comments";
         return em.createQuery(query, Post.class).getResultList();
     }
@@ -53,7 +53,7 @@ public class PostEmRepository {
 //    join
 //        comment c1_0
 //            on p1_0.id=c1_0.post_id
-    public List<Post> findAllJoinFetchLimitByEm(Pageable pageable) {
+    public List<Post> findAllJoinFetchLimit(Pageable pageable) {
         TypedQuery<Post> query = em.createQuery("select p from Post p join fetch p.comments", Post.class);
         query.setFirstResult(pageable.getPageNumber());
         query.setMaxResults(pageable.getPageSize());
@@ -62,7 +62,7 @@ public class PostEmRepository {
 
 //    https://velog.io/@hyungzin0309/JPA-%EC%9D%BC-%EB%8C%80-%EB%8B%A4-Fetch-Join-Pagination
 //    batch size 를 application.properties 에 걸어야 한다
-    public List<Post> findAllJoinNoFetchLimitByEm(Pageable pageable) {
+    public List<Post> findAllNoJoinFetchLimit(Pageable pageable) {
         TypedQuery<Post> query = em.createQuery("select p from Post p join p.comments c", Post.class);
 //        !
 //        주의할점은
@@ -92,8 +92,14 @@ public class PostEmRepository {
                 .getSingleResult();
     }
 
-    public Post findPostJoinFetchWithComment(Long postId) {
+    public Post findPostWithCommentJoinFetch(Long postId) {
         return em.createQuery("select p from Post p join fetch p.comments where p.id = :id", Post.class)
+                .setParameter("id", postId)
+                .getSingleResult();
+    }
+
+    public Post findPostWithCommentAndAttachmentNoJoinFetch(Long postId) {
+        return em.createQuery("select p from Post p join p.comments join p.attachments where p.id = :id", Post.class)
                 .setParameter("id", postId)
                 .getSingleResult();
     }
