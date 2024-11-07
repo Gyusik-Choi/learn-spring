@@ -1,0 +1,26 @@
+version: '3.7'
+services:
+  redis:
+    container_name: coupon-redis-1
+    image: redis:7.2-alpine
+    command: redis-server --port 6381
+    labels:
+      - "name=redis"
+      - "mode=standalone"
+    ports:
+      - 6381:6381
+  mysql:
+    container_name: coupon-mysql-1
+    image: ubuntu/mysql:edge
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --explicit_defaults_for_timestamp=1
+    ports:
+      # https://infinitecode.tistory.com/49
+      - 3308:3308
+    environment:
+      - MYSQL_DATABASE=coupon-1
+      - MYSQL_USER=abcd
+      - MYSQL_PASSWORD=1234
+      - MYSQL_ROOT_PASSWORD=1234
+      - TZ=UTC
+    volumes:
+      - ./mysql/init:/docker-entrypoint-initdb.d
