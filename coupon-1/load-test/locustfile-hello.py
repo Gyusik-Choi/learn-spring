@@ -8,4 +8,4 @@ class HelloWorld(FastHttpUser):
 
     @task
     def hello(self):
-        response = self.client.get("/hello")
+        self.client.get("/hello")
