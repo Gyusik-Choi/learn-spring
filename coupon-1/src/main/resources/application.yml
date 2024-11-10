@@ -5,8 +5,8 @@ spring:
     activate:
       on-profile: local
   datasource:
-    url: jdbc:mysql://localhost:3308/coupon-1?useUnicode=yes&characterEncoding=UTF-8&rewriteBatchedStatements=true
     hikari:
+      jdbc-url: jdbc:mysql://localhost:3308/coupon-1?useUnicode=yes&characterEncoding=UTF-8&rewriteBatchedStatements=true
       driver-class-name: com.mysql.cj.jdbc.Driver
       maximum-pool-size: 10
       max-lifetime: 30000
