@@ -4,29 +4,52 @@
 
 ## 설정 에러 및 해결
 
-docker 명령어
+### docker 명령어
 
+- docker-compose.yml 실행
+
+```
 docker-compose up -d
+```
 
+<br>
+
+- docker-compose.yml 을 구동할 worker 를 3개로 설정
+
+```
 docker-compose up -d --scale worker=3
-
-<br>
-
-```
-Can not read response from server. Expected to read 4 bytes, read 0 bytes before connection was unexpectedly lost.
 ```
 
-docker 로 mysql 연결시 port 변경 방법
+<br>
 
-https://infinitecode.tistory.com/49
+### docker 에서 mysql 연결
+
+- [mysql port 변경 방법](https://infinitecode.tistory.com/49)
+
+```
+// my.cnf
+port=3308
+```
 
 <br>
 
-port 변경 후에도 에러가 발생하는 경우
+- [Public key retrieval is not allowed 에러](https://deeplify.dev/database/troubleshoot/public-key-retrieval-is-not-allowed)
 
-https://seongeun-it.tistory.com/317
+```
+드라이버의 속성에서 allowPublickeyRetrieval 을 true 로 변경해야 한다
+```
 
 <br>
+
+- [터미널로 port 변경방법 확인](https://seongeun-it.tistory.com/317)
+
+```
+
+```
+
+<br>
+
+- 계정 관련 에러
 
 ```
 Access denied for user 'abcd'@'%' to database 'coupon-1'
@@ -40,11 +63,9 @@ https://kdh0518.tistory.com/entry/Docker-ERROR-1045-28000-Access-denied-for-user
 
 <br>
 
-mysql 연결시 public key retrieval is not allowed 에러가 발생했을 경우 해결 방법
+### Spring
 
-https://deeplify.dev/database/troubleshoot/public-key-retrieval-is-not-allowed
-
-<br>
+- component scan 에러
 
 component scan 관련 에러가 있었는데 한참헤맨 후 active profile 설정을 다시 하니 해결이 됐다. 정확히 이것 때문에 해결이 된지는 모르겠다. CouponApiApplication 의 active profile 을 local 로 설정했다. 아래의 링크를 참고했다.
 
@@ -52,27 +73,21 @@ https://jojoldu.tistory.com/547
 
 <br>
 
-```
-Failed to configure a DataSource: 'url' attribute is not specified and no embedded datasource could be configured.
+### Python
 
-Reason: Failed to determine a suitable driver class
-```
-
-hikari jdbc 설정시 에러 해결 방법
-
-https://bje0716.tistory.com/36
-
-<br>
+- 인터프리터 에러
 
 ```
 No Python interpreter configured for the module
 ```
 
-파이썬 인터프리터 에러
+```
+file - project structure 의 SDKs 에서 Python SDK 를 System Interpreter 로 설정한 뒤, file - project structure 의 Modules 에서 + 를 눌러서 Python 을 추가했다. load-test 폴더가 위치한 곳은 main, test 폴더 내부가 아니라 최상단 경로라 main, test 와 나란한 경로에 추가했다.
+```
 
 https://ddururiiiiiii.tistory.com/351
 
 https://jojoldu.tistory.com/465
 
-file - project structure 의 SDKs 에서 Python SDK 를 System Interpreter 로 설정한 뒤, file - project structure 의 Modules 에서 + 를 눌러서 Python 을 추가했다. load-test 폴더가 위치한 곳은 main, test 폴더 내부가 아니라 최상단 경로라 main, test 와 나란한 경로에 추가했다.
+
 
