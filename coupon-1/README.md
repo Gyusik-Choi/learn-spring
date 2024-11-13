@@ -1,6 +1,8 @@
 # Coupon-1
 
+[패스트캠퍼스 강의](https://fastcampus.co.kr/dev_online_traffic_data) 에서 선착순 쿠폰 발급 강의를 정리하기 위한 프로젝트다. 강의에서는 멀티 모듈로 진행하는데 여기서는 싱글 모듈로 진행한다.
 
+<br>
 
 ## 설정 에러 및 해결
 
