@@ -1,10 +1,12 @@
 package com.example.coupon_1.model;
 
+import com.example.coupon_1.exception.CouponIssueException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 
+import static com.example.coupon_1.exception.ErrorCode.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class CouponTest {
@@ -143,7 +145,8 @@ class CouponTest {
                 .build();
 
         // when & then
-        assertThrows(RuntimeException.class, coupon::issue);
+        CouponIssueException exception = assertThrows(CouponIssueException.class, coupon::issue);
+        assertEquals(INVALID_COUPON_ISSUE_QUANTITY, exception.getErrorCode());
     }
 
     @Test
@@ -159,6 +162,7 @@ class CouponTest {
                 .build();
 
         // when & then
-        assertThrows(RuntimeException.class, coupon::issue);
+        CouponIssueException exception = assertThrows(CouponIssueException.class, coupon::issue);
+        assertEquals(INVALID_COUPON_ISSUE_DATE, exception.getErrorCode());
     }
 }
