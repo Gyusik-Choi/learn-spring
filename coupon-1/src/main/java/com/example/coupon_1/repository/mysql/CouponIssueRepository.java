@@ -1,13 +1,13 @@
 package com.example.coupon_1.repository.mysql;
 
 import com.example.coupon_1.model.CouponIssue;
-import com.example.coupon_1.model.QCouponIssue;
 import com.querydsl.jpa.JPQLQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import static com.example.coupon_1.model.QCouponIssue.*;
 
+// https://tecoble.techcourse.co.kr/post/2021-08-08-basic-querydsl/
 @RequiredArgsConstructor
 @Repository
 public class CouponIssueRepository {
