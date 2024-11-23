@@ -19,4 +19,16 @@ public class CouponIssueController {
         couponIssueRequestService.issueRequestV1(body);
         return new CouponIssueResponseDto(true, null);
     }
+
+    @PostMapping("/v2/issue")
+    public CouponIssueResponseDto issueV2(@RequestBody CouponIssueRequestDto body) {
+        couponIssueRequestService.issueRequestV2(body);
+        return new CouponIssueResponseDto(true, null);
+    }
+
+    @PostMapping("/v3/issue")
+    public CouponIssueResponseDto issueV3(@RequestBody CouponIssueRequestDto body) {
+        couponIssueRequestService.issueRequestV3(body);
+        return new CouponIssueResponseDto(true, null);
+    }
 }

@@ -27,6 +27,15 @@ public class CouponIssueService {
         saveCouponIssue(couponId, userId);
     }
 
+    @Transactional
+    public void issueWithLock(long couponId, long userId) {
+        synchronized (this) {
+            Coupon coupon = findCoupon(couponId);
+            coupon.issue();
+            saveCouponIssue(couponId, userId);
+        }
+    }
+
     @Transactional(readOnly = true)
     public Coupon findCoupon(long couponId) {
         return couponJpaRepository.findById(couponId).orElseThrow(() ->
