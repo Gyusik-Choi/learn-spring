@@ -1,5 +1,6 @@
 package com.example.coupon_1.service;
 
+import com.example.coupon_1.component.DistributeLockExecutor;
 import com.example.coupon_1.controller.dto.CouponIssueRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 public class CouponIssueRequestService {
 
     private final CouponIssueService couponIssueService;
+    private final DistributeLockExecutor distributeLockExecutor;
 
     public void issueRequestV1(CouponIssueRequestDto requestDto) {
         couponIssueService.issue(requestDto.couponId(), requestDto.userId());
@@ -18,6 +20,8 @@ public class CouponIssueRequestService {
     }
 
     /**
+     * synchronized - 1
+     *
      * 실행 순서 <br>
      * 1. 트랜잭션 시작 <br>
      * 2. lock 획득 <br>
@@ -35,6 +39,8 @@ public class CouponIssueRequestService {
     }
 
     /**
+     * synchronized - 2
+     *
      * 실행 순서 <br>
      * 1. lock 획득 <br>
      * 2. 트랜잭션 시작<br>
@@ -50,5 +56,17 @@ public class CouponIssueRequestService {
             couponIssueService.issue(requestDto.couponId(), requestDto.userId());
             log.info("쿠폰 발급 완료. couponId: %s, userId: %s".formatted(requestDto.couponId(), requestDto.userId()));
         }
+    }
+
+    /**
+     * redis 분산락
+     */
+    public void issueRequestV4(CouponIssueRequestDto requestDto) {
+        distributeLockExecutor.execute(
+                "lock_" + requestDto.couponId(),
+                10000,
+                10000,
+                () -> couponIssueService.issue(requestDto.couponId(), requestDto.userId()));
+        log.info("쿠폰 발급 완료. couponId: %s, userId: %s".formatted(requestDto.couponId(), requestDto.userId()));
     }
 }
