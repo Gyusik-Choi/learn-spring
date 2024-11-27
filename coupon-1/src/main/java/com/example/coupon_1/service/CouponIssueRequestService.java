@@ -59,7 +59,7 @@ public class CouponIssueRequestService {
     }
 
     /**
-     * redis 분산락
+     * redis 분산락 (redisson)
      */
     public void issueRequestV4(CouponIssueRequestDto requestDto) {
         distributeLockExecutor.execute(
@@ -67,6 +67,14 @@ public class CouponIssueRequestService {
                 10000,
                 10000,
                 () -> couponIssueService.issue(requestDto.couponId(), requestDto.userId()));
+        log.info("쿠폰 발급 완료. couponId: %s, userId: %s".formatted(requestDto.couponId(), requestDto.userId()));
+    }
+
+    /**
+     * DB 락 - exclusive lock
+     */
+    public void issueRequestV5(CouponIssueRequestDto requestDto) {
+        couponIssueService.issueWithXLock(requestDto.couponId(), requestDto.userId());
         log.info("쿠폰 발급 완료. couponId: %s, userId: %s".formatted(requestDto.couponId(), requestDto.userId()));
     }
 }

@@ -12,5 +12,5 @@ class CouponIssueV1(FastHttpUser):
             "couponId": 1,
             "userId": random.randint(1, 10000000)
         }
-        with self.rest("POST", "/v3/issue", json=payload):
+        with self.rest("POST", "/v5/issue", json=payload):
             pass
