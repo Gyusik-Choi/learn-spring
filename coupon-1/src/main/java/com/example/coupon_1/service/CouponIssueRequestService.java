@@ -13,6 +13,7 @@ public class CouponIssueRequestService {
 
     private final CouponIssueService couponIssueService;
     private final DistributeLockExecutor distributeLockExecutor;
+    private final AsyncCouponIssueServiceV1 asyncCouponIssueServiceV1;
 
     public void issueRequestV1(CouponIssueRequestDto requestDto) {
         couponIssueService.issue(requestDto.couponId(), requestDto.userId());
@@ -76,5 +77,9 @@ public class CouponIssueRequestService {
     public void issueRequestV5(CouponIssueRequestDto requestDto) {
         couponIssueService.issueWithXLock(requestDto.couponId(), requestDto.userId());
         log.info("쿠폰 발급 완료. couponId: %s, userId: %s".formatted(requestDto.couponId(), requestDto.userId()));
+    }
+
+    public void asyncIssueRequestV1(CouponIssueRequestDto requestDto) {
+        asyncCouponIssueServiceV1.issue(requestDto.couponId(), requestDto.userId());
     }
 }
