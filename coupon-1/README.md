@@ -7,9 +7,19 @@
 ## 개요
 
 
+
+
 <br>
 
 ## 엔티티
+
+### Coupon
+
+
+
+<br>
+
+### CouponIssue
 
 
 
@@ -57,6 +67,18 @@ Redis 에서 사용할 자료구조는 Set 이다. Sorted Set 대신 Set 을 사
 
 <br>
 
+#### sorted set
+
+
+
+<br>
+
+#### set
+
+
+
+<br>
+
 ## 부하 테스트
 
 ### 단순 구조
@@ -96,6 +118,30 @@ Redis 에서 사용할 자료구조는 Set 이다. Sorted Set 대신 Set 을 사
 트랜잭션을 시작하기 전에 Lock 을 획득하는 순서로 진행했다. 이때는 동시성 이슈가 발생하지 않는다.
 
 Lock 을 획득하지 못하면 트랜잭션을 시작할 수 없다. Lock 을 획득한 하나의 스레드가 쿠폰 발급을 마치고 트랜잭션을 커밋을 끝낸 뒤 Lock 을 반납할 때까지 다른 스레드는 Lock 을 획득할 수 없어서 쿠폰 발급을 할 수 없다.
+
+<br>
+
+### Redis 분산락 (Redisson)
+
+
+
+<br>
+
+### DB exclusive lock
+
+
+
+<br>
+
+### 비동기 - sorted set
+
+
+
+<br>
+
+### 비동기 - set
+
+
 
 <br>
 
