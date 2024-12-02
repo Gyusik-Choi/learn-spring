@@ -13,7 +13,7 @@ public class CouponIssueRequestService {
 
     private final CouponIssueService couponIssueService;
     private final DistributeLockExecutor distributeLockExecutor;
-    private final AsyncCouponIssueServiceV1 asyncCouponIssueServiceV1;
+    private final AsyncCouponIssueService asyncCouponIssueServiceV1;
 
     public void issueRequestV1(CouponIssueRequestDto requestDto) {
         couponIssueService.issue(requestDto.couponId(), requestDto.userId());
@@ -80,6 +80,6 @@ public class CouponIssueRequestService {
     }
 
     public void asyncIssueRequestV1(CouponIssueRequestDto requestDto) {
-        asyncCouponIssueServiceV1.issue(requestDto.couponId(), requestDto.userId());
+        asyncCouponIssueServiceV1.issueV1(requestDto.couponId(), requestDto.userId());
     }
 }
