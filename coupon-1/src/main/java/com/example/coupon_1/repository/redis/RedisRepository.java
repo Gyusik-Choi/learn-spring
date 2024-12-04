@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Repository
 public class RedisRepository {
@@ -36,5 +38,9 @@ public class RedisRepository {
 
     public Boolean sIsMember(String key, String value) {
         return redisTemplate.opsForSet().isMember(key, value);
+    }
+
+    public Long rPush(String key, String value) {
+        return redisTemplate.opsForList().rightPush(key, value);
     }
 }
