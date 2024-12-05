@@ -41,6 +41,8 @@ dependencies {
 	// redis
 	implementation("org.redisson:redisson-spring-boot-starter:3.16.4")
 
+	implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
+
 	runtimeOnly 'com.h2database:h2'
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
