@@ -49,17 +49,12 @@ public class Coupon extends BaseTimeEntity {
     @Column(nullable = false)
     private LocalDateTime dateIssueEnd;
 
-    public boolean availableIssuedQuantity() {
-        if (totalQuantity == null) return true;
-        return totalQuantity > issuedQuantity;
-    }
-
-    public boolean availableIssueDate() {
-        LocalDateTime now = LocalDateTime.now();
-        return dateIssueStart.isBefore(now) && dateIssueEnd.isAfter(now);
-    }
-
     public void issue() {
+        checkIssuableCoupon();
+        issuedQuantity += 1;
+    }
+
+    public void checkIssuableCoupon() {
         if (!availableIssuedQuantity()) {
             throw new CouponIssueException(
                     INVALID_COUPON_ISSUE_QUANTITY,
@@ -73,7 +68,15 @@ public class Coupon extends BaseTimeEntity {
                     "발급 가능한 일자가 아닙니다. request : %s, issueStart : %s, issueEnd : %s"
                             .formatted(LocalDateTime.now(), dateIssueEnd, dateIssueStart));
         }
+    }
 
-        issuedQuantity += 1;
+    public boolean availableIssuedQuantity() {
+        if (totalQuantity == null) return true;
+        return totalQuantity > issuedQuantity;
+    }
+
+    public boolean availableIssueDate() {
+        LocalDateTime now = LocalDateTime.now();
+        return dateIssueStart.isBefore(now) && dateIssueEnd.isAfter(now);
     }
 }
