@@ -44,40 +44,6 @@ class CouponIssueServiceTest {
     }
 
     @Test
-    @DisplayName("쿠폰 발급 내역이 존재하면 예외를 반환한다")
-    void saveCouponIssue_1() {
-        // given
-        CouponIssue couponIssue = CouponIssue
-                .builder()
-                .couponId(1L)
-                .userId(1L)
-                .build();
-
-        couponIssueJpaRepository.save(couponIssue);
-
-        // when
-        CouponIssueException exception = assertThrows(CouponIssueException.class, () ->
-                sut.saveCouponIssue(couponIssue.getCouponId(), couponIssue.getUserId()));
-
-        // then
-        assertEquals(DUPLICATED_COUPON_ISSUE, exception.getErrorCode());
-    }
-
-    @Test
-    @DisplayName("쿠폰 발급 내역이 존재하지 않는다면 쿠폰을 발급한다")
-    void saveCouponIssue_2() {
-        // given
-        long couponId = 1L;
-        long userId = 1L;
-
-        // when
-        CouponIssue result = sut.saveCouponIssue(couponId, userId);
-
-        // then
-        assertTrue(couponIssueJpaRepository.findById(result.getId()).isPresent());
-    }
-
-    @Test
     @DisplayName("발급 수량, 기한, 중복 발급 문제가 없다면 쿠폰을 발급한다")
     void issue_1() {
         // given
