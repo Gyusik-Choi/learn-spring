@@ -32,6 +32,15 @@ public record CouponRedisEntity(
                 coupon.getDateIssueEnd());
     }
 
+    /**
+     * Coupon 엔티티와 달리 해당 record 는
+     * issuedQuantity 필드가 없어서
+     * 수량에 대한 유효성 검사를 할 수 없다.
+     * 애초에 해당 record 는
+     * 쿠폰 검색을 DB 에서 하지 않고
+     * Redis 캐시로 조회하기 위해 만든 DTO 에 가까워서
+     * issuedQuantity 처럼 실시간성 정보를 갖고 있기에 적절하지 않다
+     */
     public void checkIssuableCoupon() {
           if (!availableIssueDate()) throw new CouponIssueException(
                   INVALID_COUPON_ISSUE_DATE,
