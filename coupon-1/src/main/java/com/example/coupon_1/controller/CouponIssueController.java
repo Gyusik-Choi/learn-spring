@@ -49,4 +49,22 @@ public class CouponIssueController {
         couponIssueRequestService.asyncIssueRequestV1(body);
         return new CouponIssueResponseDto(true, null);
     }
+
+    @PostMapping("/v2/issue-async")
+    public CouponIssueResponseDto asyncIssueV2(@RequestBody CouponIssueRequestDto body) {
+        couponIssueRequestService.asyncIssueRequestV2(body);
+        return new CouponIssueResponseDto(true, null);
+    }
+
+    @PostMapping("/v3/issue-async")
+    public CouponIssueResponseDto asyncIssueV3(@RequestBody CouponIssueRequestDto body) {
+        couponIssueRequestService.asyncIssueRequestV3(body);
+        return new CouponIssueResponseDto(true, null);
+    }
+
+    @PostMapping("/v4/issue-async")
+    public CouponIssueResponseDto asyncIssueV4(@RequestBody CouponIssueRequestDto body) {
+        couponIssueRequestService.asyncIssueRequestV4(body);
+        return new CouponIssueResponseDto(true, null);
+    }
 }

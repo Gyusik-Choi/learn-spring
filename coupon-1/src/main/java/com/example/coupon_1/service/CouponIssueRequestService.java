@@ -13,7 +13,7 @@ public class CouponIssueRequestService {
 
     private final CouponIssueService couponIssueService;
     private final DistributeLockExecutor distributeLockExecutor;
-    private final AsyncCouponIssueService asyncCouponIssueServiceV1;
+    private final AsyncCouponIssueService asyncCouponIssueService;
 
     public void issueRequestV1(CouponIssueRequestDto requestDto) {
         couponIssueService.issue(requestDto.couponId(), requestDto.userId());
@@ -79,7 +79,31 @@ public class CouponIssueRequestService {
         log.info("쿠폰 발급 완료. couponId: %s, userId: %s".formatted(requestDto.couponId(), requestDto.userId()));
     }
 
+    /**
+     * 유저의 요청을 sorted set 에 적재
+     */
     public void asyncIssueRequestV1(CouponIssueRequestDto requestDto) {
-        asyncCouponIssueServiceV1.issueV1(requestDto.couponId(), requestDto.userId());
+        asyncCouponIssueService.issueV1(requestDto.couponId(), requestDto.userId());
+    }
+
+    /**
+     * AsyncCouponIssueService 의 issueV2 메소드 연산들이 원자적이지 않아서 동시성 이슈가 발생할 수 있다.
+     */
+    public void asyncIssueRequestV2(CouponIssueRequestDto requestDto) {
+        asyncCouponIssueService.issueV2(requestDto.couponId(), requestDto.userId());
+    }
+
+    /**
+     * Redis 분산락
+     */
+    public void asyncIssueRequestV3(CouponIssueRequestDto requestDto) {
+        asyncCouponIssueService.issueV3(requestDto.couponId(), requestDto.userId());
+    }
+
+    /**
+     * 쿠폰을 DB 가 아닌 Redis 캐시에서 조회
+     */
+    public void asyncIssueRequestV4(CouponIssueRequestDto requestDto) {
+        asyncCouponIssueService.issueV4(requestDto.couponId(), requestDto.userId());
     }
 }
