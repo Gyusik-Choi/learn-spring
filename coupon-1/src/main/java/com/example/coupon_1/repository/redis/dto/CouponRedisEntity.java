@@ -42,10 +42,10 @@ public record CouponRedisEntity(
      * issuedQuantity 처럼 실시간성 정보를 갖고 있기에 적절하지 않다
      */
     public void checkIssuableCoupon() {
-          if (!availableIssueDate()) throw new CouponIssueException(
-                  INVALID_COUPON_ISSUE_DATE,
-                  "발급 가능한 일자가 아닙니다. couponId: %s, issueStart: %s, issueEnd: %s"
-                          .formatted(id, dateIssueStart(), dateIssueEnd()));
+        if (!availableIssueDate()) throw new CouponIssueException(
+              INVALID_COUPON_ISSUE_DATE,
+              "발급 가능한 일자가 아닙니다. couponId: %s, issueStart: %s, issueEnd: %s"
+                      .formatted(id, dateIssueStart(), dateIssueEnd()));
     }
 
     private boolean availableIssueDate() {

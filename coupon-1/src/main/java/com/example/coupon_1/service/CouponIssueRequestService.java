@@ -101,7 +101,7 @@ public class CouponIssueRequestService {
     }
 
     /**
-     * 쿠폰을 DB 가 아닌 Redis 캐시에서 조회
+     * Redis 분산락 + 쿠폰을 DB 가 아닌 Redis 캐시에서 조회
      */
     public void asyncIssueRequestV4(CouponIssueRequestDto requestDto) {
         asyncCouponIssueService.issueV4(requestDto.couponId(), requestDto.userId());

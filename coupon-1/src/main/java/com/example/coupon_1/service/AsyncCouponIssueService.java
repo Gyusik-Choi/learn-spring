@@ -42,15 +42,7 @@ public class AsyncCouponIssueService {
 
         coupon.checkIssuableCoupon();
 
-        if (!asyncCouponValidator.availableTotalIssueQuantity(coupon.getTotalQuantity(), couponId))
-            throw new CouponIssueException(
-                    INVALID_COUPON_ISSUE_QUANTITY,
-                    "발급 가능한 수량을 초과 합니다. couponId=%s, userId=%s".formatted(couponId, userId));
-
-        if (!asyncCouponValidator.availableUserIssueQuantity(couponId, userId))
-            throw new CouponIssueException(
-                    DUPLICATED_COUPON_ISSUE,
-                    "이미 발급 요청이 처리 됐습니다. couponId=%s, userId=%s".formatted(couponId, userId));
+        asyncCouponValidator.checkAvailableCouponIssue(coupon, userId);
 
         saveCouponIssue(couponId, userId);
     }
@@ -64,16 +56,7 @@ public class AsyncCouponIssueService {
         coupon.checkIssuableCoupon();
 
         distributeLockExecutor.execute("lock %s".formatted(couponId), 3000, 3000, () -> {
-            if (!asyncCouponValidator.availableTotalIssueQuantity(coupon.getTotalQuantity(), couponId))
-                throw new CouponIssueException(
-                        INVALID_COUPON_ISSUE_QUANTITY,
-                        "발급 가능한 수량을 초과 합니다. couponId=%s, userId=%s".formatted(couponId, userId));
-
-            if (!asyncCouponValidator.availableUserIssueQuantity(couponId, userId))
-                throw new CouponIssueException(
-                        DUPLICATED_COUPON_ISSUE,
-                        "이미 발급 요청이 처리 됐습니다. couponId=%s, userId=%s".formatted(couponId, userId));
-
+            asyncCouponValidator.checkAvailableCouponIssue(coupon, userId);
             saveCouponIssue(couponId, userId);
         });
     }

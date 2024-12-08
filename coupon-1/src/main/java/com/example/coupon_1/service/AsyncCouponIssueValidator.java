@@ -27,6 +27,22 @@ public class AsyncCouponIssueValidator {
     }
 
     /**
+     * 파라미터 타입만 다르고 구현이 중복되고 있다
+     * 중복 개선이 필요하다
+     */
+    public void checkAvailableCouponIssue(Coupon coupon, long userId) {
+        if (!availableTotalIssueQuantity(coupon.getTotalQuantity(), coupon.getId()))
+            throw new CouponIssueException(
+                    INVALID_COUPON_ISSUE_QUANTITY,
+                    "발급 가능한 수량을 초과 합니다. couponId=%s, userId=%s".formatted(coupon.getId(), userId));
+
+        if (!availableUserIssueQuantity(coupon.getId(), userId))
+            throw new CouponIssueException(
+                    DUPLICATED_COUPON_ISSUE,
+                    "이미 발급 요청이 처리 됐습니다. couponId=%s, userId=%s".formatted(coupon.getId(), userId));
+    }
+
+    /**
      * CouponRedisEntity 로 조회한 쿠폰이 발급 가능한지 검증
      */
     public void checkAvailableCouponIssue(CouponRedisEntity coupon, long userId) {
