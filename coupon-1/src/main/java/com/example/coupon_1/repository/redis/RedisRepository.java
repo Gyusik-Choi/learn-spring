@@ -1,16 +1,27 @@
 package com.example.coupon_1.repository.redis;
 
+import com.example.coupon_1.controller.dto.CouponIssueRequestDto;
+import com.example.coupon_1.exception.CouponIssueException;
+import com.example.coupon_1.util.CouponRedisUtil;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.script.RedisScript;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+
+import static com.example.coupon_1.exception.ErrorCode.FAIL_COUPON_ISSUE_REQUEST;
+import static com.example.coupon_1.util.CouponRedisUtil.*;
 
 @RequiredArgsConstructor
 @Repository
 public class RedisRepository {
 
     private final RedisTemplate<String, String> redisTemplate;
+    private final RedisScript<String> issueScript = issueRequestScript();
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     /**
      * <a href="https://redis.io/docs/latest/commands/zadd/">zAdd</a><br>
@@ -42,5 +53,40 @@ public class RedisRepository {
 
     public Long rPush(String key, String value) {
         return redisTemplate.opsForList().rightPush(key, value);
+    }
+
+    public void issueRequest(long couponId, long userId, long totalIssueQuantity) {
+        String issueRequestKey = getIssueRequestKey(couponId);
+        String issueRequestQueueKey = getIssueRequestQueueKey();
+        CouponIssueRequestDto dto = new CouponIssueRequestDto(couponId, userId);
+        try {
+            String code = redisTemplate.execute(
+                    issueScript,
+                    List.of(issueRequestKey, issueRequestQueueKey),
+                    String.valueOf(userId),
+                    String.valueOf(totalIssueQuantity),
+                    objectMapper.writeValueAsString(dto));
+            CouponIssueRequestCode.checkRequestResult(CouponIssueRequestCode.find(code));
+        } catch (JsonProcessingException e) {
+            throw new CouponIssueException(FAIL_COUPON_ISSUE_REQUEST, "input: %s".formatted(dto));
+        }
+    }
+
+    private RedisScript<String> issueRequestScript() {
+        String script =
+                """
+                if redis.call('SISMEMBER', KEYS[1], ARGV[1]) == 1 then
+                    return '2'
+                end
+                
+                if tonumber(ARGV[2]) > redis.call('SCARD', KEYS[1]) then
+                    redis.call('SADD', KEYS[1], ARGV[1])
+                    redis.call('RPUSH', KEYS[2], ARGV[3])
+                    return '1'
+                end
+                
+                return '3'
+                """;
+        return RedisScript.of(script, String.class);
     }
 }
