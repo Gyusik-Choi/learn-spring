@@ -107,6 +107,9 @@ public class CouponIssueRequestService {
         asyncCouponIssueService.issueV4(requestDto.couponId(), requestDto.userId());
     }
 
+    /**
+     * Redis Script (Redis 분산락을 사용하지 않음)
+     */
     public void asyncIssueRequestV5(CouponIssueRequestDto requestDto) {
         asyncCouponIssueService.issueV5(requestDto.couponId(), requestDto.userId());
     }

@@ -94,6 +94,9 @@ public class AsyncCouponIssueService {
         });
     }
 
+    /**
+     * Redis Script (Redis 분산락을 사용하지 않음)
+     */
     public void issueV5(long couponId, long userId) {
         CouponRedisEntity coupon = couponCacheService.getCouponCache(couponId);
 
