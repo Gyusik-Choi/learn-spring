@@ -106,4 +106,8 @@ public class CouponIssueRequestService {
     public void asyncIssueRequestV4(CouponIssueRequestDto requestDto) {
         asyncCouponIssueService.issueV4(requestDto.couponId(), requestDto.userId());
     }
+
+    public void asyncIssueRequestV5(CouponIssueRequestDto requestDto) {
+        asyncCouponIssueService.issueV5(requestDto.couponId(), requestDto.userId());
+    }
 }

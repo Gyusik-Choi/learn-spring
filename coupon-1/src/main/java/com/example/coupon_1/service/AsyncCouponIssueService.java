@@ -94,6 +94,18 @@ public class AsyncCouponIssueService {
         });
     }
 
+    public void issueV5(long couponId, long userId) {
+        CouponRedisEntity coupon = couponCacheService.getCouponCache(couponId);
+
+        coupon.checkIssuableCoupon();
+
+        int totalQuantity = coupon.totalQuantity() == null
+                ? Integer.MAX_VALUE
+                : coupon.totalQuantity();
+
+        redisRepository.issueRequest(couponId, userId, totalQuantity);
+    }
+
     private void saveCouponIssue(long couponId, long userId) {
         CouponIssueQueueValue queueValue = new CouponIssueQueueValue(couponId, userId);
         String queueStringValue;
