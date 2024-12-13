@@ -55,6 +55,18 @@ public class RedisRepository {
         return redisTemplate.opsForList().rightPush(key, value);
     }
 
+    public Long lSize(String key) {
+        return redisTemplate.opsForList().size(key);
+    }
+
+    public String lIndex(String key, long index) {
+        return redisTemplate.opsForList().index(key, index);
+    }
+
+    public String lPop(String key) {
+        return redisTemplate.opsForList().leftPop(key);
+    }
+
     public void issueRequest(long couponId, long userId, long totalIssueQuantity) {
         String issueRequestKey = getIssueRequestKey(couponId);
         String issueRequestQueueKey = getIssueRequestQueueKey();
