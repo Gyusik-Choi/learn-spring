@@ -43,6 +43,8 @@ dependencies {
 
 	implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
 
+	implementation("com.github.ben-manes.caffeine:caffeine")
+
 	runtimeOnly 'com.h2database:h2'
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
