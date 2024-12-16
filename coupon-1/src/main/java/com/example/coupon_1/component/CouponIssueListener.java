@@ -25,7 +25,6 @@ public class CouponIssueListener {
 
     @Scheduled(fixedDelay = 1000L)
     public void issue() throws JsonProcessingException {
-        log.info("listen...");
         while (existCouponIssueTarget()) {
             CouponIssueRequestDto target = getIssueTarget();
             log.info("발급 시작 target: %s".formatted(target));
