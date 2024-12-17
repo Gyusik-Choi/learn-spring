@@ -63,8 +63,14 @@ public class CouponIssueService {
 
     /**
      * <a href="https://stackoverflow.com/questions/45630211/spring-transaction-when-calling-private-method">참고링크</a>
-     * private method 에는 @Transaction 애노테이션을 사용할 수 없다
-     * 
+     * <a href="https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/transaction/support/TransactionSynchronizationManager.html">TransactionSynchronizationManager</a>
+     * <a href="https://hudi.blog/spring-transaction-synchronization-and-abstraction/">블로그</a>
+     * private method 에는 '@Transactional' 애노테이션을 사용할 수 없다
+     * 스프링의 aop 는 프록시 기반인데 프록시는 private method 에는 적용할 수 없다
+     * 그렇다고 트랜잭션을 private method 에 적용할 수 없는건 아니다
+     * '@Transactional' 애노테이션이 있는 public method 에서
+     * '@Transactional' 애노테이션이 없는 private method 를 호출하면
+     * 이미 트랜잭션이 시작했기 때문에 트랜잭션이 그대로 적용된다.
      */
     private void saveCouponIssue(long couponId, long userId) {
         CouponIssue issue = CouponIssue
