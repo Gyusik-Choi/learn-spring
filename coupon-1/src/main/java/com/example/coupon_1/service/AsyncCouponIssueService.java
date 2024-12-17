@@ -109,6 +109,23 @@ public class AsyncCouponIssueService {
         redisRepository.issueRequest(couponId, userId, totalQuantity);
     }
 
+    /**
+     * 쿠폰을 Redis 캐시가 아닌 로컬 캐시로 조회한다
+     * 애플리케이션의 로컬 메모리에 쿠폰 캐시를 두어서
+     * Redis 에 접근하지 않고 애플리케이션 내에서 처리하도록 한다
+     */
+    public void issueV6(long couponId, long userId) {
+        CouponRedisEntity coupon = couponCacheService.getCouponLocalCache(couponId);
+
+        coupon.checkIssuableCoupon();
+
+        int totalQuantity = coupon.totalQuantity() == null
+                ? Integer.MAX_VALUE
+                : coupon.totalQuantity();
+
+        redisRepository.issueRequest(couponId, userId, totalQuantity);
+    }
+
     private void saveCouponIssue(long couponId, long userId) {
         CouponIssueQueueValue queueValue = new CouponIssueQueueValue(couponId, userId);
         String queueStringValue;

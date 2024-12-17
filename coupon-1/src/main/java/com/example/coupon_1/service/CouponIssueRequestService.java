@@ -113,4 +113,11 @@ public class CouponIssueRequestService {
     public void asyncIssueRequestV5(CouponIssueRequestDto requestDto) {
         asyncCouponIssueService.issueV5(requestDto.couponId(), requestDto.userId());
     }
+
+    /**
+     * 쿠폰을 Redis 캐시가 아닌 로컬 캐시로 조회한다
+     */
+    public void asyncIssueRequestV6(CouponIssueRequestDto requestDto) {
+        asyncCouponIssueService.issueV6(requestDto.couponId(), requestDto.userId());
+    }
 }
