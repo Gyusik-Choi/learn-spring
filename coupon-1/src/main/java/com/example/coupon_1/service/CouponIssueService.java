@@ -17,13 +17,11 @@ public class CouponIssueService {
 
     private final CouponJpaRepository couponJpaRepository;
     private final CouponIssueJpaRepository couponIssueJpaRepository;
-    private final CouponIssueValidator couponIssueValidator;
 
     @Transactional
     public void issue(long couponId, long userId) {
         Coupon coupon = findCoupon(couponId);
         coupon.issue();
-        couponIssueValidator.checkAvailableCouponIssue(coupon, userId);
         saveCouponIssue(couponId, userId);
     }
 
@@ -32,7 +30,6 @@ public class CouponIssueService {
         synchronized (this) {
             Coupon coupon = findCoupon(couponId);
             coupon.issue();
-            couponIssueValidator.checkAvailableCouponIssue(coupon, userId);
             saveCouponIssue(couponId, userId);
         }
     }
@@ -41,22 +38,34 @@ public class CouponIssueService {
     public void issueWithXLock(long couponId, long userId) {
         Coupon coupon = findCouponWithXLock(couponId);
         coupon.issue();
-        couponIssueValidator.checkAvailableCouponIssue(coupon, userId);
         saveCouponIssue(couponId, userId);
     }
 
     @Transactional(readOnly = true)
     public Coupon findCoupon(long couponId) {
-        return couponJpaRepository.findById(couponId).orElseThrow(() ->
-                new CouponIssueException(COUPON_NOT_EXIST, "쿠폰 정책이 존재하지 않습니다. %s".formatted(couponId)));
+        Coupon coupon = couponJpaRepository
+                .findById(couponId)
+                .orElseThrow(() ->
+                    new CouponIssueException(COUPON_NOT_EXIST, "쿠폰 정책이 존재하지 않습니다. %s".formatted(couponId)));
+        coupon.checkIssuableCoupon();
+        return coupon;
     }
 
     @Transactional
     public Coupon findCouponWithXLock(long couponId) {
-        return couponJpaRepository.findCouponWithXLock(couponId).orElseThrow(() ->
-                new CouponIssueException(COUPON_NOT_EXIST, "쿠폰 정책이 존재하지 않습니다. %s".formatted(couponId)));
+        Coupon coupon = couponJpaRepository
+                .findCouponWithXLock(couponId)
+                .orElseThrow(() ->
+                    new CouponIssueException(COUPON_NOT_EXIST, "쿠폰 정책이 존재하지 않습니다. %s".formatted(couponId)));
+        coupon.checkIssuableCoupon();
+        return coupon;
     }
 
+    /**
+     * <a href="https://stackoverflow.com/questions/45630211/spring-transaction-when-calling-private-method">참고링크</a>
+     * private method 에는 @Transaction 애노테이션을 사용할 수 없다
+     * 
+     */
     private void saveCouponIssue(long couponId, long userId) {
         CouponIssue issue = CouponIssue
                 .builder()
