@@ -1,7 +1,6 @@
 package com.example.coupon_1.model;
 
 import com.example.coupon_1.exception.CouponIssueException;
-import com.example.coupon_1.exception.ErrorCode;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -79,5 +78,9 @@ public class Coupon extends BaseTimeEntity {
         LocalDateTime now = LocalDateTime.now();
         if (dateIssueStart == null || dateIssueEnd == null) return true;
         return dateIssueStart.isBefore(now) && dateIssueEnd.isAfter(now);
+    }
+
+    public boolean isIssueComplete() {
+        return dateIssueEnd.isBefore(LocalDateTime.now()) || !availableIssuedQuantity();
     }
 }
