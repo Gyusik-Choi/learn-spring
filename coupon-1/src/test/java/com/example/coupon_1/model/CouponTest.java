@@ -21,11 +21,8 @@ class CouponTest {
                 .issuedQuantity(99)
                 .build();
 
-        // when
-        boolean result = coupon.availableIssuedQuantity();
-
-        // then
-        assertTrue(result);
+        // when & then
+        assertDoesNotThrow(coupon::checkIssuableCoupon);
     }
 
     @Test
@@ -38,11 +35,8 @@ class CouponTest {
                 .issuedQuantity(100)
                 .build();
 
-        // when
-        boolean result = coupon.availableIssuedQuantity();
-
-        // then
-        assertFalse(result);
+        // when & then
+        assertThrows(CouponIssueException.class, coupon::checkIssuableCoupon);
     }
 
     @Test
@@ -55,11 +49,8 @@ class CouponTest {
                 .issuedQuantity(100)
                 .build();
 
-        // when
-        boolean result = coupon.availableIssuedQuantity();
-
-        // then
-        assertTrue(result);
+        // when & then
+        assertDoesNotThrow(coupon::checkIssuableCoupon);
     }
 
     @Test
@@ -72,11 +63,8 @@ class CouponTest {
                 .dateIssueEnd(LocalDateTime.now().plusDays(2))
                 .build();
 
-        // when
-        boolean result = coupon.availableIssueDate();
-
-        // then
-        assertFalse(result);
+        // when & then
+        assertThrows(CouponIssueException.class, coupon::checkIssuableCoupon);
     }
 
     @Test
@@ -89,11 +77,8 @@ class CouponTest {
                 .dateIssueEnd(LocalDateTime.now().plusDays(2))
                 .build();
 
-        // when
-        boolean result = coupon.availableIssueDate();
-
-        // then
-        assertTrue(result);
+        // when & then
+        assertDoesNotThrow(coupon::checkIssuableCoupon);
     }
 
     @Test
@@ -106,11 +91,8 @@ class CouponTest {
                 .dateIssueEnd(LocalDateTime.now().minusDays(1))
                 .build();
 
-        // when
-        boolean result = coupon.availableIssueDate();
-
-        // then
-        assertFalse(result);
+        // when & then
+        assertThrows(CouponIssueException.class, coupon::checkIssuableCoupon);
     }
 
     @Test

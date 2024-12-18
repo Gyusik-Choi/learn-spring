@@ -70,13 +70,14 @@ public class Coupon extends BaseTimeEntity {
         }
     }
 
-    public boolean availableIssuedQuantity() {
+    private boolean availableIssuedQuantity() {
         if (totalQuantity == null) return true;
         return totalQuantity > issuedQuantity;
     }
 
-    public boolean availableIssueDate() {
+    private boolean availableIssueDate() {
         LocalDateTime now = LocalDateTime.now();
+        if (dateIssueStart == null || dateIssueEnd == null) return true;
         return dateIssueStart.isBefore(now) && dateIssueEnd.isAfter(now);
     }
 }
