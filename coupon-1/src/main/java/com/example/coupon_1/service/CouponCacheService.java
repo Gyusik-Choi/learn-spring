@@ -4,6 +4,7 @@ import com.example.coupon_1.model.Coupon;
 import com.example.coupon_1.repository.redis.dto.CouponRedisEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.aop.framework.AopContext;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +37,16 @@ public class CouponCacheService {
         // getCouponCache 메소드를 직접 호출하지 않고
         // 프록시를 통해서 getCouponCache 메소드를 호출하도록 한다
         return proxy().getCouponCache(couponId);
+    }
+
+    @CachePut(cacheNames = "coupon")
+    public CouponRedisEntity putCouponCache(long couponId) {
+        return proxy().getCouponCache(couponId);
+    }
+
+    @CachePut(cacheNames = "coupon", cacheManager = "localCacheManager")
+    public CouponRedisEntity putCouponLocalCache(long couponId) {
+        return proxy().getCouponLocalCache(couponId);
     }
 
     private CouponCacheService proxy() {

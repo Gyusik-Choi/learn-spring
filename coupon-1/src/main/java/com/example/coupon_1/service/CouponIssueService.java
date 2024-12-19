@@ -1,11 +1,13 @@
 package com.example.coupon_1.service;
 
+import com.example.coupon_1.event.CouponIssueCompleteEvent;
 import com.example.coupon_1.exception.CouponIssueException;
 import com.example.coupon_1.model.Coupon;
 import com.example.coupon_1.model.CouponIssue;
 import com.example.coupon_1.repository.mysql.CouponIssueJpaRepository;
 import com.example.coupon_1.repository.mysql.CouponJpaRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,12 +19,14 @@ public class CouponIssueService {
 
     private final CouponJpaRepository couponJpaRepository;
     private final CouponIssueJpaRepository couponIssueJpaRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Transactional
     public void issue(long couponId, long userId) {
         Coupon coupon = findCoupon(couponId);
         coupon.issue();
         saveCouponIssue(couponId, userId);
+        publishCouponEvent(coupon);
     }
 
     @Transactional
@@ -79,5 +83,19 @@ public class CouponIssueService {
                 .userId(userId)
                 .build();
         couponIssueJpaRepository.save(issue);
+    }
+
+    /**
+     * 쿠폰 발행이 완료된 경우
+     * (기간이 종료 되었거나 발급 수량이 소진된 경우)
+     * 이벤트를 발행한다
+     * 이벤트를 발행해서 쿠폰에 대한 Redis 캐시와 로컬 캐시를 갱신한다
+     * 쿠폰의 수량 정보가 갱신되고 쿠폰의 발행이 완료된 정보를
+     * CouponRedisEntity 에도 추가해서 쿠폰을 발행하는 로직까지 오지 않고
+     * AsyncCouponIssueService 의 issue 로직에서
+     * CouponRedisEntity 를 통한 유효성 검사를 통해 걸러낸다
+     */
+    private void publishCouponEvent(Coupon coupon) {
+        if (coupon.isIssueComplete()) eventPublisher.publishEvent(new CouponIssueCompleteEvent(coupon.getId()));
     }
 }

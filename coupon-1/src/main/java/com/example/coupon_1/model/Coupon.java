@@ -69,7 +69,7 @@ public class Coupon extends BaseTimeEntity {
         }
     }
 
-    private boolean availableIssuedQuantity() {
+    public boolean availableIssuedQuantity() {
         if (totalQuantity == null) return true;
         return totalQuantity > issuedQuantity;
     }
