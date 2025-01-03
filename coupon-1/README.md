@@ -4,6 +4,8 @@
 
 [패스트캠퍼스의 대용량 트래픽 강의](https://fastcampus.co.kr/dev_online_traffic_data) 에서 선착순 쿠폰 발급 섹션을 학습하기 위한 프로젝트다.
 
+한정된 수량의 선착순 쿠폰을 발급하는 기능을 개발한다. 짧은 시간에 많은 트래픽이 몰리는 상황에서 
+
 쿠폰 신청과 쿠폰 발급을 별도의 서비스로 구분해서 이벤트 기반의 비동기로 처리한다.
 
 강의에서는 멀티 모듈로 진행하는데 여기서는 싱글 모듈로 진행한다.
@@ -11,19 +13,115 @@
 
 <br>
 
-# 엔티티
+# ERD
 
-
-
-
+![erd](docs-asset/erd.PNG)
 
 <br>
 
-## 트래픽 처리
+# 엔티티
 
-### 단순 구조
+Coupon
 
-Client -> API -> DB
+```java
+@Entity
+@Table(name = "coupons")
+public class Coupon extends BaseTimeEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
+    private String title;
+
+    @Column(nullable = false)
+    @Enumerated(value = EnumType.STRING)
+    private CouponType couponType;
+
+    @Column()
+    private Integer totalQuantity;
+
+    @Column(nullable = false)
+    private int issuedQuantity;
+
+    @Column(nullable = false)
+    private int discountAmount;
+
+    @Column(nullable = false)
+    private int minAvailableAmount;
+
+    @Column(nullable = false)
+    private LocalDateTime dateIssueStart;
+
+    @Column(nullable = false)
+    private LocalDateTime dateIssueEnd;
+}
+```
+
+<br>
+
+CouponIssue
+
+```java
+@Entity
+@Table(name = "coupon_issues")
+public class CouponIssue extends BaseTimeEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
+    private Long couponId;
+
+    @Column(nullable = false)
+    private Long userId;
+
+    @Column(nullable = false)
+    @CreatedDate
+    private LocalDateTime dateIssued;
+
+    @Column()
+    private LocalDateTime dateUsed;
+}
+```
+
+<br>
+
+BaseTimeEntity
+
+```java
+@MappedSuperclass
+public class BaseTimeEntity {
+
+    @CreatedDate
+    private LocalDateTime dateCreated;
+
+    @LastModifiedDate
+    private LocalDateTime dateUpdated;
+}
+```
+
+<br>
+
+CouponType
+
+```java
+public enum CouponType {
+    FIRST_COME_FIRST_SERVED // 선착순 쿠폰
+}
+```
+
+<br>
+
+# 트래픽 처리
+
+## 동기
+
+```
+클라이언트 -> API -> DB
+```
 
 클라이언트에서 API 로 요청을 보내고, API 에서는 DB 에 트랜잭션 요청하는 구조다. 
 
@@ -33,25 +131,25 @@ DB 에 병목이 생기면 읽기 작업을 캐시를 둘 수 있다. 예를 들
 
 <br>
 
-### Lock (synchronized) 
+## Lock (synchronized)
 
 
 
 <br>
 
-### Redis 분산락 (Redisson)
+## Redis 분산락 (Redisson)
 
 
 
 <br>
 
-### DB exclusive lock
+## DB exclusive lock
 
 
 
 <br>
 
-### 비동기
+## 비동기
 
 유저 트래픽과 쿠폰발급 트랜잭션을 분리해서 비동기로 쿠폰발급을 처리한다.
 
@@ -61,13 +159,7 @@ Redis 에서 사용할 자료구조는 Set 이다. Sorted Set 대신 Set 을 사
 
 <br>
 
-#### sorted set
-
-
-
-<br>
-
-#### set
+### Sorted Set vs Set
 
 
 
@@ -75,7 +167,7 @@ Redis 에서 사용할 자료구조는 Set 이다. Sorted Set 대신 Set 을 사
 
 ## 부하 테스트
 
-### 단순 구조
+### 동기
 
 동시성 이슈가 발생한다. coupons 테이블의 issued_quantity 494 로 500 개가 채워지지 않았으나, 실제로 발급된 coupon_issues 테이블의 row 수는 4924 로 500개로 제한된 쿠폰 발급량 보다 거의 10배 많은 쿠폰 발급이 발생했다. 
 
@@ -226,5 +318,5 @@ https://ddururiiiiiii.tistory.com/351
 
 https://jojoldu.tistory.com/465
 
-
+https://dbdiagram.io/
 
