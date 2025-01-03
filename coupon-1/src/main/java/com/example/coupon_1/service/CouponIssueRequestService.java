@@ -22,7 +22,6 @@ public class CouponIssueRequestService {
 
     /**
      * synchronized - 1
-     *
      * 실행 순서 <br>
      * 1. 트랜잭션 시작 <br>
      * 2. lock 획득 <br>
@@ -41,7 +40,6 @@ public class CouponIssueRequestService {
 
     /**
      * synchronized - 2
-     *
      * 실행 순서 <br>
      * 1. lock 획득 <br>
      * 2. 트랜잭션 시작<br>
