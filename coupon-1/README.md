@@ -195,6 +195,48 @@ Redis 에서 사용할 자료구조는 Set 이다. Sorted Set 대신 Set 을 사
 
 ### Sorted Set vs Set
 
+Sorted Set 과 Set 모두 특정 key 에 대한 value 의 중복을 허용하지 않는다. 반면에 Sorted Set 은 Set 과 달리 추가 인자로 넣는 score 에 따라 정렬을 유지할 수 있다.
+
+Sorted Set 에서 값을 추가하는 메서드(ZADD)의 [시간 복잡도는 O(logN)](https://redis.io/docs/latest/develop/data-types/sorted-sets/) 이고 Set 에서 값을 추가하는 메서드(SADD)의 [시간 복잡도는 O(1)](https://redis.io/docs/latest/develop/data-types/sets/) 이다. 
+
+ZADD 는 값이 이미 존재할 경우 덮어쓰고 SADD 는 값이 이미 존재할 경우 덮어쓰지 않고 무시한다.
+
+Spring 에서 제공하는 Redis 의 Sorted Set (ZSet) 연산 구현체인 DefaultZSetOperations 클래스의 addIfAbsent 메소드를 이용하면 값이 존재하지 않는 경우만 Sorted Set 에 값을 추가할 수 있다.
+
+이 프로젝트에서 Sorted Set 과 Set 둘 다 사용 가능한데 최종적으로는 Set 을 사용한다. 
+
+첫번째 이유는 선착순 쿠폰의 경우 선착순 여부가 중요하지 선착순 대상의 순서가 중요하지 않기 때문이다. 예를 들어, 선착순으로 100개의 쿠폰을 발행한다고 할때 1등부터 100등까지는 동일한 쿠폰을 받고 등수에 따른 차이가 없다.
+
+또 다른 이유는 ZADD 보다 SADD 의 성능이 더 빠르기 때문이다. ZADD 의 시간 복잡도는 O(logN) 인 반면 SADD 의 시간 복잡도는 O(1) 이다. 
+
+선착순 여부만 판단하면 되기 때문에 굳이 선착순 대상의 정렬 순서를 유지하는 ZADD 를 사용할 이유가 없다. 
+
+게다가 ZADD 의 경우 값이 있는 경우 덮어쓴다고 했는데 한 유저가 선착순 신청을 여러번 했다고 할 때 마지막 요청이 아닌 첫번째 요청으로 접수되는게 자연스럽다. 덮어써서 마지막 요청으로 접수되는건 바람직하지 않다.
+
+덮어쓰지 않기 위해 값이 존재하지 않는 경우만 Sorted Set 에 추가하는 addIfAbsent 메소드를 사용할 수 있는데 addIfAbsent 메소드도 내부적으로는 결국 ZADD 를 호출한다. SADD 보다 성능 면에서 떨어지기 때문에 SADD 를 사용하는게 낫다.
+
+<br>
+
+### Redis 분산락
+
+동시성 이슈를 해결하기 위해 사용한다.
+
+
+
+<br>
+
+### Redis Script
+
+Redis 분산락 대신 성능 향상을 위해 Redis Script 를 사용한다.
+
+
+
+<br>
+
+### 캐시
+
+Redis 캐시, 로컬 캐시
+
 
 
 <br>
@@ -367,3 +409,9 @@ https://ddururiiiiiii.tistory.com/351
 https://jojoldu.tistory.com/465
 
 https://dbdiagram.io/
+
+https://www.youtube.com/watch?v=MTSn93rNPPE
+
+https://redis.io/docs/latest/develop/data-types/sorted-sets/
+
+https://redis.io/docs/latest/develop/data-types/sets/
