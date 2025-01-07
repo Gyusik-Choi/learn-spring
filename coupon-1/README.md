@@ -219,17 +219,25 @@ Spring 에서 제공하는 Redis 의 Sorted Set (ZSet) 연산 구현체인 Defau
 
 ### Redis 분산락
 
-동시성 이슈를 해결하기 위해 사용한다.
+```
+분산락 안에서 진행되는 로직
+1. 쿠폰 발급 수량 제어
+2. 중복 발급 요청 제어
+3. 쿠폰 발급 요청 저장
+4. 쿠폰 발급 큐 적재
+```
 
+동시성 이슈를 해결하기 위해 분산락을 사용한다.
 
+레디스가 싱글 스레드로 동작하지만 단일 연산이라면 분산락 없이 동시성 이슈가 발생하지 않았겠지만 여러 연산이 수행되기 때문에 싱글 스레드라고 하더라도 동시성 이슈가 발생할 수 있다. 1, 2, 3, 4 로직 전체가 하나의 쿠폰 발급인데 1, 2, 3, 4는 원자적으로 실행되지 않는다. 
+
+위의 1, 2 연산에서 정합성을 검증하고 3, 4 연산에서 쿠폰 발급을 처리한다. 특정 스레드의 1, 2 연산과 3, 4 연산 사이에 다른 여러 스레드들이 1, 2 연산을 수행할 수 있다. 1, 2 연산은 모두 통과하면서 3, 4 연산도 문제없이 실행되고 쿠폰 수량과 쿠폰 발급 간의 정합성이 깨지면서 동시성 이슈가 발생하게 된다.
 
 <br>
 
 ### Redis Script
 
-Redis 분산락 대신 성능 향상을 위해 Redis Script 를 사용한다.
-
-
+Redis 분산락 대신 성능 향상을 위해 Redis Script 를 사용한다. Redis Script 를 통해 4개 작업을 원자성을 가진 1개 작업으로 전환한다.
 
 <br>
 
@@ -419,3 +427,6 @@ https://www.youtube.com/watch?v=MTSn93rNPPE
 https://redis.io/docs/latest/develop/data-types/sorted-sets/
 
 https://redis.io/docs/latest/develop/data-types/sets/
+
+https://charsyam.wordpress.com/2020/05/05/%EC%9E%85-%EA%B0%9C%EB%B0%9C-redis-6-0-threadedio%EB%A5%BC-%EC%95%8C%EC%95%84%EB%B3%B4%EC%9E%90/
+
