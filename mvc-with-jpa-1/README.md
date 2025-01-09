@@ -1,24 +1,23 @@
 # Spring MVC with JPA - 1
 
-스프링 MVC 를 기반으로 JPA 를 사용하면서 미니 프로젝트를 진행한다.
+스프링 MVC 를 기반으로 JPA 를 사용한다.
 
-미니 프로젝트를 진행하면서 학습한 내용들을 정리할 예정이다.
+JPA 를 사용하면서 연관관계(N:1/ 1:N), 글로벌 페치 전략(Eager/ Lazy), 조회 조건(전체/ 단일), ORM 기술(Spring Data JPA/ Hibernate), Join 종류(fetch join/ join) 에 따라 어떠한 차이가 있는지 학습한다.
 
 <br>
 
-정리할 내용들
+목차
 
 - Controller & RestController
 - RequiredArgsConstructor
 - JPA
   - N + 1
 
-
-  - Join 과 Fetch Join 의 차이
-  - Paging
-  - MultipleBagfetchException
-  - DTO
-- Querydsl 설정
+    - Join 과 Fetch Join 의 차이
+    - Paging
+    - MultipleBagfetchException
+    - DTO
+  - Querydsl 설정
 - Testing
 
 <br>
