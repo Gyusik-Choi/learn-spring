@@ -2,7 +2,6 @@ package com.example.coupon_1.repository.redis;
 
 import com.example.coupon_1.controller.dto.CouponIssueRequestDto;
 import com.example.coupon_1.exception.CouponIssueException;
-import com.example.coupon_1.util.CouponRedisUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 import static com.example.coupon_1.exception.ErrorCode.FAIL_COUPON_ISSUE_REQUEST;
+import static com.example.coupon_1.repository.redis.CouponIssueRequestCode.*;
 import static com.example.coupon_1.util.CouponRedisUtil.*;
 
 @RequiredArgsConstructor
@@ -78,7 +78,7 @@ public class RedisRepository {
                     String.valueOf(userId),
                     String.valueOf(totalIssueQuantity),
                     objectMapper.writeValueAsString(dto));
-            CouponIssueRequestCode.checkRequestResult(CouponIssueRequestCode.find(code));
+            checkRequestResult(find(code));
         } catch (JsonProcessingException e) {
             throw new CouponIssueException(FAIL_COUPON_ISSUE_REQUEST, "input: %s".formatted(dto));
         }
