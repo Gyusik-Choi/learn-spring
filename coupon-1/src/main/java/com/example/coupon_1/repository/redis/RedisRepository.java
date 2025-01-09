@@ -73,8 +73,11 @@ public class RedisRepository {
         CouponIssueRequestDto dto = new CouponIssueRequestDto(couponId, userId);
         try {
             String code = redisTemplate.execute(
+                    // script
                     issueScript,
+                    // keys (List 타입)
                     List.of(issueRequestKey, issueRequestQueueKey),
+                    // args (나머지 모두)
                     String.valueOf(userId),
                     String.valueOf(totalIssueQuantity),
                     objectMapper.writeValueAsString(dto));
@@ -84,6 +87,14 @@ public class RedisRepository {
         }
     }
 
+    /**
+     * redis 의 쿠폰 요청 key 에 userId 가 존재하면 (이미 쿠폰 요청한 사용자인 경우) 2를 반환한다.
+     * totalIssueQuantity 가 redis 의 쿠폰 요청 key 에 저장된 value 의 갯수 보다 크면
+     * redis 의 쿠폰 요청 key 에 userId 를 추가하고,
+     * redis 의 쿠폰 발급 key 에 쿠폰 발급 요청 정보를 추가하고,
+     * 1을 반환한다.
+     * 그 외의 경우는 3을 반환한다.
+     */
     private RedisScript<String> issueRequestScript() {
         String script =
                 """
