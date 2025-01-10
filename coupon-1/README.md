@@ -255,13 +255,29 @@ Redis 분산락 대신 성능 향상을 위해 Redis Script 를 사용한다. Re
 
 # 부하 테스트
 
-locust 로 부하 테스트를 실행한다.
+![locust_load](docs-asset/locust_load.PNG)
+
+locust 로 부하 테스트를 실행한다. 
+
+locust 의 부하는 첫 100 개 요청이 10초에 걸쳐서 1000 개 요청으로 늘어나도록 설정하고, docker compose 로 3개의 worker 가 부하를 만든다.
+
+테스트를 실행하는 컴퓨터는 Dell 의 latitude 3510 노트북으로 i-5 CPU, 16GB memory 환경이다.
 
 <br>
 
 ## 동기
 
-동시성 이슈가 발생한다. coupons 테이블의 issued_quantity 494 로 500 개가 채워지지 않았으나, 실제로 발급된 coupon_issues 테이블의 row 수는 4924 로 500개로 제한된 쿠폰 발급량 보다 거의 10배 많은 쿠폰 발급이 발생했다. 
+
+
+![1-2_synchronous](docs-asset/1-2_synchronous.PNG)
+
+![1-3_synchronous](docs-asset/1-3_synchronous.PNG)
+
+<br>
+
+동시성 이슈가 발생한다. 
+
+coupons 테이블의 issued_quantity 가 494 로 500 개가 채워지지 않았다. 실제로 발급된 coupon_issues 테이블의 row 수는 4924 로 500개로 제한된 쿠폰 발급량 보다 거의 10배 많은 쿠폰이 발급됐다.
 
 <br>
 
@@ -269,16 +285,11 @@ locust 로 부하 테스트를 실행한다.
 
 ### 트랜잭션 하위에서 Lock 획득 및 반납
 
-```
-실행 순서
-1. 트랜잭션 시작
-2. Lock 획득
-3. 쿠폰 발급
-4. Lock 반납
-5. 트랜잭션 커밋
-```
+![2-2_lock_1](docs-asset/2-2_lock_1.PNG)
 
-트랜잭션을 시작한 후에 Lock 을 획득하는 순서로 진행했다. 이때는 여전히 동시성 이슈가 발생한다. 
+![2-3_lock_1](docs-asset/2-3_lock_1.PNG)
+
+트랜잭션을 시작한 후에 Lock 을 획득하는 순서로 진행했다. 여전히 동시성 이슈가 발생한다. 
 
 스레드 A가 Lock 을 반납(실행순서 4)하고 트랜잭션을 커밋(실행순서 5)하기 전에 스레드 B가 트랜잭션을 시작(실행순서 1)할 수 있다. 스레드 A의 트랜잭션이 커밋되지 않아서 아직 DB에는 쿠폰 수량이 1 증가하지 않았다. 스레드 B는 쿠폰 수량을 조회하면 쿠폰 수량이 1 증가하기 이전의 쿠폰 수량 값이 조회된다.
 
@@ -286,52 +297,69 @@ locust 로 부하 테스트를 실행한다.
 
 ### 트랜잭션 상위에서 Lock 획득 및 반납
 
-```
-실행 순서
-1. Lock 획득
-2. 트랜잭션 시작
-3. 쿠폰 발급
-4. 트랜잭션 커밋
-5. Lock 반납
-```
+![3-2_lock_2](docs-asset/3-2_lock_2.PNG)
 
-트랜잭션을 시작하기 전에 Lock 을 획득하는 순서로 진행했다. 이때는 동시성 이슈가 발생하지 않는다.
+![3-3_lock_2](docs-asset/3-3_lock_2.PNG)
+
+트랜잭션을 시작하기 전에 Lock 을 획득하는 순서로 진행했다. 이때부터 동시성 이슈가 발생하지 않는다.
 
 Lock 을 획득하지 못하면 트랜잭션을 시작할 수 없다. Lock 을 획득한 하나의 스레드가 쿠폰 발급을 마치고 트랜잭션을 커밋을 끝낸 뒤 Lock 을 반납할 때까지 다른 스레드는 Lock 을 획득할 수 없어서 쿠폰 발급을 할 수 없다.
 
 <br>
 
-### Redis 분산락 (Redisson)
+## Redis 분산락 (Redisson)
 
-
-
-<br>
-
-### DB exclusive lock
-
-
+동시성 이슈가 발생하지 않는다.
 
 <br>
 
-### 비동기 - sorted set
+## DB exclusive lock
 
-
-
-<br>
-
-### 비동기 - set
-
-
+동시성 이슈가 발생하지 않는다.
 
 <br>
 
-# 설정 에러 및 해결
+## 비동기
+
+쿠폰 신청 서비스와 쿠폰 발급 서비스를 분리한 상태에서 쿠폰 신청을 처리한다. 
+
+쿠폰 신청은 쿠폰 수량을 관리하는 Redis Set 에 신청을 적재하고, 쿠폰 발급 대기열을 관리하는 Redis List 에 신청을 적재하는 것까지 진행된다.
+
+<br>
+
+### Redis 분산락 + Redis 캐시
+
+![6-1_redis_lock_redis_cache](docs-asset/6-1_redis_lock_redis_cache.PNG)
+
+마찬가지로 동시성 이슈는 발생하지 않는다.
+
+<br>
+
+### Redis Script + Redis 캐시
+
+![7-1_redis_script_redis_cache](docs-asset/7-1_redis_script_redis_cache.PNG)
+
+Redis 분산락에서 Redis Script 로 바꾸면서 RPS 가 10배 가까이 증가한다. 
+
+비동기 기반의 Redis 분산락 환경 뿐만 아니라 비동기 기반의 환경이 아닌 Lock, Redis 분산락, DB exclusive lock 에서도 RPS 는 대체로 100~200 사이를 유지했다.
+
+<br>
+
+### Redis Script + 로컬 캐시
+
+![8-1_redis_script_local_cache](docs-asset/8-1_redis_script_local_cache.PNG)
+
+Redis 캐시에서 로컬 캐시로 바꿨을 때의 RPS 차이는 그리 크지 않았다.
+
+<br>
+
+# 설정
 
 ## docker
 
 ### docker 명령어
 
-- docker-compose.yml 실행
+#### docker-compose.yml 실행
 
 ```
 docker-compose up -d
@@ -339,7 +367,7 @@ docker-compose up -d
 
 <br>
 
-- docker-compose.yml 을 구동할 worker 를 3개로 설정
+#### docker-compose.yml 을 구동할 worker 를 3개로 설정
 
 ```
 docker-compose up -d --scale worker=3
@@ -349,7 +377,7 @@ docker-compose up -d --scale worker=3
 
 ### docker 에서 mysql 연결
 
-- [mysql port 변경 방법](https://infinitecode.tistory.com/49)
+#### [mysql port 변경 방법](https://infinitecode.tistory.com/49)
 
 ```
 // my.cnf
@@ -358,7 +386,7 @@ port=3308
 
 <br>
 
-- [Public key retrieval is not allowed 에러](https://deeplify.dev/database/troubleshoot/public-key-retrieval-is-not-allowed)
+#### [Public key retrieval is not allowed 에러](https://deeplify.dev/database/troubleshoot/public-key-retrieval-is-not-allowed)
 
 ```
 드라이버의 속성에서 allowPublickeyRetrieval 을 true 로 변경해야 한다
@@ -366,15 +394,11 @@ port=3308
 
 <br>
 
-- [터미널로 port 변경방법 확인](https://seongeun-it.tistory.com/317)
-
-```
-
-```
+#### [터미널로 port 변경방법 확인](https://seongeun-it.tistory.com/317)
 
 <br>
 
-- 계정 관련 에러
+#### 계정 관련 에러
 
 ```
 Access denied for user 'abcd'@'%' to database 'coupon-1'
@@ -386,13 +410,19 @@ port 변경 후 접근 에러 발생가 발생했다. docker-compose 를 이용�
 
 ## Python
 
-- 인터프리터 에러
+#### 인터프리터 에러
 
 ```
 No Python interpreter configured for the module
 ```
 
 file - project structure 의 SDKs 에서 Python SDK 를 System Interpreter 로 설정한 뒤, file - project structure 의 Modules 에서 + 를 눌러서 Python 을 추가했다. load-test 폴더가 위치한 곳은 main, test 폴더 내부가 아니라 최상단 경로라 main, test 와 나란한 경로에 추가했다.
+
+<br>
+
+# 정리
+
+
 
 <br>
 
@@ -405,8 +435,6 @@ https://dbdiagram.io/home
 https://redis.io/docs/latest/develop/use/patterns/distributed-locks/
 
 https://helloworld.kurly.com/blog/distributed-redisson-lock/
-
-
 
 https://infinitecode.tistory.com/49
 
@@ -434,3 +462,4 @@ https://redis.io/docs/latest/develop/data-types/sets/
 
 https://charsyam.wordpress.com/2020/05/05/%EC%9E%85-%EA%B0%9C%EB%B0%9C-redis-6-0-threadedio%EB%A5%BC-%EC%95%8C%EC%95%84%EB%B3%B4%EC%9E%90/
 
+https://docs.locust.io/en/stable/index.html
